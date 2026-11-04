@@ -9,8 +9,8 @@
      like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=e2f98ec9-c887-4afe-a302-cada858af09f
      Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-<title>건물이 지어지는 과정 | 시공 8단계</title>
-<meta name="description" content="고등학생을 위한 건물 시공 과정 3D 탐험 – 공사 준비부터 완공까지 8단계">
+<title>건물이 지어지는 과정 | 시공 6단계</title>
+<meta name="description" content="고등학생을 위한 건물 시공 과정 3D 탐험 – 공사 준비부터 완공까지 6단계">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root{
@@ -145,8 +145,8 @@ body.nolabels #labels{display:none}
 .intro h1{margin:0 0 14px;font-size:clamp(34px,6vw,58px);line-height:1.12;font-weight:900;letter-spacing:-.03em;word-break:keep-all}
 .intro p{margin:0 0 26px;font-size:clamp(16px,2.2vw,19px);line-height:1.6;color:#e8ecf1;word-break:keep-all}
 .intro .go{display:inline-flex;align-items:center;gap:10px;background:var(--yellow);color:var(--ink);font-weight:900;font-size:20px;padding:18px 30px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
-.intro .steps8{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
-.intro .steps8 span{font-size:13.5px;font-weight:700;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:6px 10px;border-radius:999px}
+.intro .steps6{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
+.intro .steps6 span{font-size:13.5px;font-weight:700;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:6px 10px;border-radius:999px}
 .loading{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#dfe8ef;font-weight:800;color:var(--sub);transition:opacity .5s}
 .loading.gone{opacity:0;pointer-events:none}
 
@@ -242,8 +242,8 @@ html[lang="ru"] .approved small{display:block;font-size:13px}
   <div class="box">
     <div class="kick"><i></i><span data-i18n="introKick">건설 기술 · 시공 과정</span></div>
     <h1 data-i18n-html="introTitle">건물은 어떻게<br>지어질까?</h1>
-    <p data-i18n-html="introDescription">텅 빈 땅에서 4층 건물이 완성되기까지,<br>실제 공사 현장의 순서를 8단계로 따라가 봐요.</p>
-    <div class="steps8"><span data-i18n="introStage1">1 가설공사</span><span data-i18n="introStage2">2 토공사</span><span data-i18n="introStage3">3 기초공사</span><span data-i18n="introStage4">4 골조공사(뼈대)</span><span data-i18n="introStage5">5 골조공사(외벽)</span><span data-i18n="introStage6">6 설비공사</span><span data-i18n="introStage7">7 실내 및 마감공사</span><span data-i18n="introStage8">8 준공(완성)</span></div>
+    <p data-i18n-html="introDescription">텅 빈 땅에서 4층 건물이 완성되기까지,<br>실제 공사 현장의 순서를 6단계로 따라가 봐요.</p>
+    <div class="steps6"><span data-i18n="introStage1">1 가설공사</span><span data-i18n="introStage2">2 토공사</span><span data-i18n="introStage3">3 기초공사</span><span data-i18n="introStage4">4 골조공사</span><span data-i18n="introStage5">5 설비공사</span><span data-i18n="introStage6">6 마감공사</span></div>
     <button class="go" id="start" data-i18n="start">🚧 공사 시작하기</button>
   </div>
 </div>
@@ -252,7 +252,7 @@ html[lang="ru"] .approved small{display:block;font-size:13px}
 <script>
 (() => {
   'use strict';
-  const messages = {"ko":{"pageTitle":"건물이 지어지는 과정 | 시공 8단계","pageDescription":"고등학생을 위한 건물 시공 과정 3D 탐험 – 공사 준비부터 완공까지 8단계","brand":"건물이 지어지는 과정","language":"언어","chooseLanguage":"언어 선택","labelsTitle":"이름표 보기/숨기기","labelsAria":"이름표","soundTitle":"소리 (배경음·효과음)","soundAria":"소리","camera":"시점 되돌리기","hint":"👆 화면을 드래그하면 돌려 볼 수 있어요 · 두 손가락으로 확대","approved":"사용 승인","approvedDetail":"준공검사 통과 · 안전 확인 완료","water":"수도관 (물)","electricity":"전기선","air":"공기 통로","elevator":"엘리베이터","tipHeading":"💡 알아두기","previous":"◀ 이전","next":"다음 단계 ▶","restart":"처음부터 ↺","playPause":"재생/멈춤","pause":"일시 정지","resume":"재생","replayTitle":"이 단계 다시 보기","replayAria":"다시 보기","introKick":"건설 기술 · 시공 과정","introTitle":"건물은 어떻게<br>지어질까?","introDescription":"텅 빈 땅에서 4층 건물이 완성되기까지,<br>실제 공사 현장의 순서를 8단계로 따라가 봐요.","introStage1":"1 가설공사","introStage2":"2 토공사","introStage3":"3 기초공사","introStage4":"4 골조공사(뼈대)","introStage5":"5 골조공사(외벽)","introStage6":"6 설비공사","introStage7":"7 실내 및 마감공사","introStage8":"8 준공(완성)","start":"🚧 공사 시작하기","loading":"공사 현장을 준비하고 있어요…","badge":"STEP {step} / 8","xrayOn":"🔍 벽 속 보는 중 (끄기)","xrayOff":"🔍 벽 속 들여다보기","cutOn":"🏠 앞벽 다시 닫기","cutOff":"🏠 앞벽 열고 안쪽 보기","nightOn":"☀️ 낮으로 바꾸기","nightOff":"🌙 밤 풍경 보기","soundOff":"소리 끔","soundEffects":"효과음만 켜짐","soundAll":"배경음 + 효과음 켜짐","foundationPour":"🪣 콘크리트 붓는 중","foundationPourDetail":"철근이 콘크리트 속에 잠겨요","foundationCure":"⏳ 굳히는 중 · {day}일째","foundationCured":"✅ 단단하게 다 굳었어요!","foundationCureDetail":"물을 뿌려 촉촉하게 지켜요 (약 28일이면 튼튼)","foundationCuredDetail":"이제 이 위에 건물을 올려요","columnPour":"🪣 {floor}층 기둥에 콘크리트 붓는 중","columnPourDetail":"나무 틀 속을 아래부터 꽉 채워요","slabPour":"🪣 {floor}층 바닥에 콘크리트 붓는 중","slabPourDetail":"한 줄씩 지그재그로 고르게 펴요","floorCure":"⏳ {floor}층 굳히는 중 · {day}일째","floorCureDetail":"물을 뿌려 촉촉하게 지켜요. 색이 밝아질수록 단단해져요","removeForms":"✅ 다 굳었어요! 나무 틀 떼기","removeFormsDetail":"틀을 떼어 내면 단단한 기둥과 바닥만 남아요","floorComplete":"<b>4층 + 지붕까지 완료!</b>","floorProgress":"지금 <b>{floor}층</b> 작업 중 (전체 4층)","fenceSign":"안전제일","officeSign":"현장사무소"},"ru":{"pageTitle":"Как строят здания | 8 этапов строительства","pageDescription":"3D-путешествие по стройплощадке для старшеклассников: 8 этапов от подготовки до готового здания","brand":"Как строят здания","language":"Язык","chooseLanguage":"Выбрать язык","labelsTitle":"Показать или скрыть подписи","labelsAria":"Подписи объектов","soundTitle":"Звук: музыка и звуковые эффекты","soundAria":"Звук","camera":"Вернуть исходный ракурс","hint":"👆 Перетаскивайте, чтобы вращать вид · Разведите два пальца для увеличения","approved":"ВВОД В ЭКСПЛУАТАЦИЮ","approvedDetail":"Итоговая проверка пройдена · Безопасность подтверждена","water":"Водопровод (вода)","electricity":"Электропроводка","air":"Воздуховоды","elevator":"Лифт","tipHeading":"💡 Полезно знать","previous":"◀ Назад","next":"Далее ▶","restart":"Сначала ↺","playPause":"Воспроизведение / пауза","pause":"Приостановить","resume":"Продолжить","replayTitle":"Повторить этот этап","replayAria":"Повторить этап","introKick":"Строительные технологии · Этапы строительства","introTitle":"Как строят<br>здания?","introDescription":"Как на пустом участке появляется четырёхэтажное здание?<br>Пройдём 8 этапов в той же последовательности, что и на настоящей стройке.","introStage1":"1 Подготовка","introStage2":"2 Земляные работы","introStage3":"3 Фундамент","introStage4":"4 Каркас","introStage5":"5 Наружные стены","introStage6":"6 Коммуникации","introStage7":"7 Внутренняя отделка","introStage8":"8 Завершение","start":"🚧 Начать стройку","loading":"Готовим строительную площадку…","badge":"ЭТАП {step} / 8","xrayOn":"🔍 Скрыть то, что внутри стен","xrayOff":"🔍 Заглянуть внутрь стен","cutOn":"🏠 Вернуть переднюю стену","cutOff":"🏠 Открыть вид внутрь","nightOn":"☀️ Включить дневной вид","nightOff":"🌙 Посмотреть ночной вид","soundOff":"Звук выключен","soundEffects":"Включены только звуковые эффекты","soundAll":"Включены музыка и звуковые эффекты","foundationPour":"🪣 Заливка бетона","foundationPourDetail":"Бетон постепенно покрывает арматуру","foundationCure":"⏳ Твердение бетона · День {day}","foundationCured":"✅ Бетон набрал прочность!","foundationCureDetail":"Увлажняем бетон. Примерно через 28 дней он набирает прочность","foundationCuredDetail":"Теперь на этом основании можно возводить здание","columnPour":"🪣 Бетонирование колонн · Этаж {floor}","columnPourDetail":"Заполняем деревянную опалубку снизу вверх","slabPour":"🪣 Бетонирование перекрытия · Этаж {floor}","slabPourDetail":"Равномерно распределяем бетон рядами, зигзагом","floorCure":"⏳ Твердение · Этаж {floor} · День {day}","floorCureDetail":"Увлажняем бетон. По мере твердения он становится светлее","removeForms":"✅ Бетон затвердел! Снимаем опалубку","removeFormsDetail":"После снятия формы остаются прочные колонны и перекрытие","floorComplete":"<b>Все 4 этажа и крыша готовы!</b>","floorProgress":"Строим <b>этаж {floor}</b> из 4","fenceSign":"БЕЗОПАСНОСТЬ|ПРЕЖДЕ ВСЕГО","officeSign":"ШТАБ СТРОЙКИ"}};
+  const messages = {"ko":{"pageTitle":"건물이 지어지는 과정 | 시공 6단계","pageDescription":"고등학생을 위한 건물 시공 과정 3D 탐험 – 공사 준비부터 완공까지 6단계","brand":"건물이 지어지는 과정","language":"언어","chooseLanguage":"언어 선택","labelsTitle":"이름표 보기/숨기기","labelsAria":"이름표","soundTitle":"소리 (배경음·효과음)","soundAria":"소리","camera":"시점 되돌리기","hint":"👆 화면을 드래그하면 돌려 볼 수 있어요 · 두 손가락으로 확대","approved":"사용 승인","approvedDetail":"준공검사 통과 · 안전 확인 완료","water":"수도관 (물)","electricity":"전기선","air":"공기 통로","elevator":"엘리베이터","tipHeading":"💡 알아두기","previous":"◀ 이전","next":"다음 단계 ▶","restart":"처음부터 ↺","playPause":"재생/멈춤","pause":"일시 정지","resume":"재생","replayTitle":"이 단계 다시 보기","replayAria":"다시 보기","introKick":"건설 기술 · 시공 과정","introTitle":"건물은 어떻게<br>지어질까?","introDescription":"텅 빈 땅에서 4층 건물이 완성되기까지,<br>실제 공사 현장의 순서를 6단계로 따라가 봐요.","start":"🚧 공사 시작하기","loading":"공사 현장을 준비하고 있어요…","badge":"STEP {step} / 6","xrayOn":"🔍 벽 속 보는 중 (끄기)","xrayOff":"🔍 벽 속 들여다보기","cutOn":"🏠 앞벽 다시 닫기","cutOff":"🏠 앞벽 열고 안쪽 보기","nightOn":"☀️ 낮으로 바꾸기","nightOff":"🌙 밤 풍경 보기","soundOff":"소리 끔","soundEffects":"효과음만 켜짐","soundAll":"배경음 + 효과음 켜짐","foundationPour":"🪣 콘크리트 붓는 중","foundationPourDetail":"철근이 콘크리트 속에 잠겨요","foundationCure":"⏳ 굳히는 중 · {day}일째","foundationCured":"✅ 단단하게 다 굳었어요!","foundationCureDetail":"물을 뿌려 촉촉하게 지켜요 (약 28일이면 튼튼)","foundationCuredDetail":"이제 이 위에 건물을 올려요","columnPour":"🪣 {floor}층 기둥에 콘크리트 붓는 중","columnPourDetail":"나무 틀 속을 아래부터 꽉 채워요","slabPour":"🪣 {floor}층 바닥에 콘크리트 붓는 중","slabPourDetail":"한 줄씩 지그재그로 고르게 펴요","floorCure":"⏳ {floor}층 굳히는 중 · {day}일째","floorCureDetail":"물을 뿌려 촉촉하게 지켜요. 색이 밝아질수록 단단해져요","removeForms":"✅ 다 굳었어요! 나무 틀 떼기","removeFormsDetail":"틀을 떼어 내면 단단한 기둥과 바닥만 남아요","floorComplete":"<b>4층 + 지붕까지 완료!</b>","floorProgress":"지금 <b>{floor}층</b> 작업 중 (전체 4층)","fenceSign":"안전제일","officeSign":"현장사무소","introStage1":"1 가설공사","introStage2":"2 토공사","introStage3":"3 기초공사","introStage4":"4 골조공사","introStage5":"5 설비공사","introStage6":"6 마감공사"},"ru":{"pageTitle":"Как строят здания | 6 этапов строительства","pageDescription":"3D-путешествие по стройплощадке для старшеклассников: 6 этапов от подготовки до готового здания","brand":"Как строят здания","language":"Язык","chooseLanguage":"Выбрать язык","labelsTitle":"Показать или скрыть подписи","labelsAria":"Подписи объектов","soundTitle":"Звук: музыка и звуковые эффекты","soundAria":"Звук","camera":"Вернуть исходный ракурс","hint":"👆 Перетаскивайте, чтобы вращать вид · Разведите два пальца для увеличения","approved":"ВВОД В ЭКСПЛУАТАЦИЮ","approvedDetail":"Итоговая проверка пройдена · Безопасность подтверждена","water":"Водопровод (вода)","electricity":"Электропроводка","air":"Воздуховоды","elevator":"Лифт","tipHeading":"💡 Полезно знать","previous":"◀ Назад","next":"Далее ▶","restart":"Сначала ↺","playPause":"Воспроизведение / пауза","pause":"Приостановить","resume":"Продолжить","replayTitle":"Повторить этот этап","replayAria":"Повторить этап","introKick":"Строительные технологии · Этапы строительства","introTitle":"Как строят<br>здания?","introDescription":"Как на пустом участке появляется четырёхэтажное здание?<br>Пройдём 6 этапов в той же последовательности, что и на настоящей стройке.","start":"🚧 Начать стройку","loading":"Готовим строительную площадку…","badge":"ЭТАП {step} / 6","xrayOn":"🔍 Скрыть то, что внутри стен","xrayOff":"🔍 Заглянуть внутрь стен","cutOn":"🏠 Вернуть переднюю стену","cutOff":"🏠 Открыть вид внутрь","nightOn":"☀️ Включить дневной вид","nightOff":"🌙 Посмотреть ночной вид","soundOff":"Звук выключен","soundEffects":"Включены только звуковые эффекты","soundAll":"Включены музыка и звуковые эффекты","foundationPour":"🪣 Заливка бетона","foundationPourDetail":"Бетон постепенно покрывает арматуру","foundationCure":"⏳ Твердение бетона · День {day}","foundationCured":"✅ Бетон набрал прочность!","foundationCureDetail":"Увлажняем бетон. Примерно через 28 дней он набирает прочность","foundationCuredDetail":"Теперь на этом основании можно возводить здание","columnPour":"🪣 Бетонирование колонн · Этаж {floor}","columnPourDetail":"Заполняем деревянную опалубку снизу вверх","slabPour":"🪣 Бетонирование перекрытия · Этаж {floor}","slabPourDetail":"Равномерно распределяем бетон рядами, зигзагом","floorCure":"⏳ Твердение · Этаж {floor} · День {day}","floorCureDetail":"Увлажняем бетон. По мере твердения он становится светлее","removeForms":"✅ Бетон затвердел! Снимаем опалубку","removeFormsDetail":"После снятия формы остаются прочные колонны и перекрытие","floorComplete":"<b>Все 4 этажа и крыша готовы!</b>","floorProgress":"Строим <b>этаж {floor}</b> из 4","fenceSign":"БЕЗОПАСНОСТЬ|ПРЕЖДЕ ВСЕГО","officeSign":"ШТАБ СТРОЙКИ","introStage1":"1 Подготовка","introStage2":"2 Земляные работы","introStage3":"3 Фундамент","introStage4":"4 Каркас и наружные стены","introStage5":"5 Коммуникации","introStage6":"6 Отделка"}};
   const storageKey = 'construction-simulation-language';
   const supported = language => language === 'ko' || language === 'ru';
   let savedLanguage = 'ko';
@@ -308,55 +308,46 @@ const t = I18N.t;
    단계 데이터
    ========================================================= */
 const STAGES = [
-  { short:'가설공사', title:'공사 준비하기', term:'가설공사', dur:27.3,
+  { short:'가설공사', title:'공사 준비하기', term:'가설공사', start:0, end:1,
     lead:'공사를 시작하기 전에 현장을 안전하게 정리해요.',
     desc:'먼저 공사장 둘레에 높은 울타리를 세워요. 지나가는 사람이 다치지 않게 막기 위해서예요. 일하는 사람들이 쓸 임시 사무실과 화장실을 놓고, 측량기로 땅을 재서 건물이 들어설 자리를 정확하게 표시해요.',
     tip:'울타리나 임시 사무실처럼 공사하는 동안만 쓰고 끝나면 치우는 시설을 ‘가설’ 시설이라고 해요.',
     subs:[['울타리 세우기',0,.33],['임시 사무실 놓기',.33,.47],['건물 자리 표시',.47,1]],
     cam:{t:[0,1,0],p:[24,22,30]} },
-  { short:'토공사', title:'땅 파기', term:'토공사', dur:51.0,
+  { short:'토공사', title:'땅 파기', term:'토공사', start:1, end:2,
     lead:'건물이 들어갈 자리의 흙을 파내요.',
     desc:'깊게 파면 옆의 흙이 무너질 수 있어요. 그래서 먼저 철 기둥을 박고 나무판을 끼워 흙을 막는 벽을 만들어요. 그다음 굴착기가 땅을 파고, 파낸 흙은 덤프트럭이 실어 날라요.',
     tip:'흙이 무너지지 않게 막는 벽을 ‘흙막이’라고 불러요.',
     subs:[['흙 막는 벽 세우기',0,.17],['첫 번째 트럭에 흙 싣기',.17,.55],['두 번째 트럭에 흙 싣기',.55,.93],['장비 철수',.93,1]],
     cam:{t:[7,-.5,9.5],p:[-7,15,33]} },
-  { short:'기초공사', title:'튼튼한 기초 만들기', term:'기초공사', dur:40.5,
+  { short:'기초공사', title:'튼튼한 기초 만들기', term:'기초공사', start:2, end:3,
     lead:'무거운 건물이 가라앉지 않도록 땅속 받침을 만들어요.',
     desc:'건물은 아주 무거워서 땅이 약하면 기울거나 가라앉아요. 그래서 긴 말뚝을 땅속 깊이 두드려 박아 단단한 땅까지 닿게 해요. 그 위에 철근을 그물처럼 엮고 콘크리트를 부으면 건물을 받쳐 줄 두꺼운 바닥판이 완성돼요.',
     tip:'콘크리트는 누르는 힘에 강하고, 철근은 당기는 힘에 강해요. 둘을 함께 쓰면 서로의 약점을 채워 줘요.',
     subs:[['말뚝 박기',0,.36],['철근 엮기',.36,.5],['콘크리트 붓기',.5,.78],['물 뿌리며 굳히기',.78,1]],
     cam:{t:[0,-1.5,1],p:[-6,24,22]} },
-  { short:'골조공사(뼈대)', title:'뼈대 세우기', term:'골조공사(뼈대)', dur:84.0, cycle:true,
-    lead:'기둥과 바닥판으로 건물의 뼈대를 한 층씩 쌓아 올려요.',
-    desc:'① 철근으로 기둥과 바닥의 모양을 잡고 ② 나무 틀로 감싼 뒤 ③ 콘크리트를 붓고 ④ 단단하게 굳으면 틀을 떼어 내요. 이 과정을 한 층씩 반복해요. 타워크레인은 무거운 자재를 높은 곳으로 옮기고, 펌프카는 긴 팔로 콘크리트를 위층까지 보내요.',
-    tip:'콘크리트를 부어 모양을 만들기 위해 잠깐 세우는 나무 틀을 ‘거푸집’이라고 해요. 막 부은 콘크리트는 반짝이는 진회색이고, 굳을수록 밝은 회색으로 바뀌어요.',
-    subs:[['철근 세우기',0,.16],['나무 틀 두르기',.16,.36],['콘크리트 붓기',.36,.68],['굳히고 틀 떼기',.68,1]],
-    cam:{t:[0,3,0],p:[-25,14,27]} },
-  { short:'골조공사(외벽)', title:'겉옷 입히기', term:'골조공사(외벽)', dur:35.5,
-    lead:'뼈대 바깥에 벽을 쌓고 창문을 달아요.',
-    desc:'먼저 건물 둘레에 사람이 올라서서 일할 수 있는 발판을 세워요. 그 위에서 벽돌을 한 장 한 장 쌓아 바깥벽을 만들고, 창문을 끼워요. 지붕에는 비가 새지 않도록 물을 막는 층을 깔아요.',
-    tip:'높은 곳에서 일하려고 건물 바깥에 세우는 임시 발판을 ‘비계’라고 해요.',
-    subs:[['발판 세우기',0,.18],['벽돌 쌓기',.15,.58],['창문 달기',.58,.84],['지붕 방수',.84,1]],
-    cam:{t:[0,7,0],p:[28,13,32]} },
-  { short:'설비공사', title:'물·전기·공기 길 만들기', term:'설비공사', dur:32.7, toggle:'xray',
+  { short:'골조공사', title:'뼈대와 외벽 만들기', term:'골조공사', start:3, end:5, cycle:true,
+    lead:'기둥과 바닥판으로 뼈대를 세운 뒤 외벽과 창문을 완성해요.',
+    desc:'철근을 엮고 나무 틀을 두른 뒤 콘크리트를 붓고 굳혀요. 틀을 떼는 과정을 한 층씩 반복해 4층 뼈대를 세워요. 이어서 건물 둘레에 작업 발판을 설치하고 벽돌을 쌓아 외벽을 만들어요. 창문을 끼우고 지붕에 방수층을 깔면 다음 설비공사를 할 준비가 돼요.',
+    tip:'콘크리트 모양을 잡는 임시 나무 틀은 ‘거푸집’, 외벽 작업을 위한 임시 발판은 ‘비계’라고 해요.',
+    subs:[['철근 세우기',0,.16],['나무 틀 두르기',.16,.36],['콘크리트 붓기',.36,.68],['굳히고 틀 떼기',.68,1],['발판 세우기',1,1.18],['벽돌 쌓기',1.15,1.58],['창문 달기',1.58,1.84],['지붕 방수',1.84,2]],
+    cam:{t:[0,3,0],p:[-25,14,27]}, exteriorCam:{t:[0,7,0],p:[28,13,32]} },
+  { short:'설비공사', title:'물·전기·공기 길 만들기', term:'설비공사', start:5, end:6, toggle:'xray',
     lead:'사람이 생활하려면 물, 전기, 깨끗한 공기가 필요해요.',
     desc:'벽과 천장 속에 수도관, 전기선, 공기를 보내는 통로를 설치해요. 지붕에는 냉난방 기계를 올리고, 건물 가운데에는 엘리베이터를 달아요. 완성되면 대부분 벽과 천장 속에 숨어서 잘 보이지 않아요.',
     tip:'사람 몸에 혈관과 신경이 있듯, 건물에도 물과 전기가 흐르는 길이 숨어 있어요.',
     subs:[['수도관',0,.25],['전기선',.25,.5],['공기 통로·냉난방',.5,.75],['엘리베이터',.75,1]],
     cam:{t:[0,7,0],p:[25,12,26]} },
-  { short:'실내 및 마감공사', title:'실내 꾸미기', term:'실내 및 마감공사', dur:32.7, toggle:'cut',
-    lead:'텅 빈 공간을 사람이 쓸 수 있는 방으로 만들어요.',
-    desc:'벽을 세워 방을 나누고, 바닥재를 깔아요. 천장을 붙여 관과 전선을 가리고 조명을 달아요. 마지막으로 책상과 의자 같은 가구를 들이면 사람이 지낼 수 있는 공간이 돼요.',
-    tip:'‘마감’은 눈에 보이는 겉면을 깔끔하게 마무리하는 일을 말해요.',
-    subs:[['벽 세워 방 나누기',0,.22],['바닥 깔기',.22,.42],['천장·조명 달기',.42,.62],['가구 들이기',.62,1]],
-    cam:{t:[0,6,1],p:[21,8,23]} },
-  { short:'준공(완성)', title:'완성! 건물 사용 시작', term:'준공(완성)', dur:30.0, toggle:'night',
-    lead:'공사 장비를 치우고 주변을 정리하면 드디어 완성이에요.',
-    desc:'타워크레인을 해체하고 울타리를 걷어 내요. 건물 앞에 보도를 깔고 나무를 심어요. 마지막으로 관청에서 설계도대로 안전하게 지어졌는지 검사하고, 통과하면 사람들이 건물을 사용할 수 있어요.',
-    tip:'공사가 모두 끝났는지 확인하는 마지막 검사를 ‘준공검사’라고 해요.',
-    subs:[['크레인 해체',0,.18],['울타리 치우기',.18,.32],['나무·보도 정리',.32,.62],['준공검사 통과',.62,1]],
-    cam:{t:[0,6,0],p:[-24,6.5,31]} },
+  { short:'마감공사', title:'실내 꾸미고 공사 마무리하기', term:'마감공사', start:6, end:8, toggle:'finish',
+    lead:'실내를 꾸미고 현장 정리와 검사를 마치면 건물이 완성돼요.',
+    desc:'벽을 세워 방을 나누고 바닥재, 천장과 조명, 가구를 설치해요. 실내 작업이 끝나면 타워크레인과 울타리를 치우고 보도와 나무를 정리해요. 마지막으로 안전하게 지어졌는지 준공검사를 받고 통과하면 건물을 사용할 수 있어요.',
+    tip:'‘마감’은 눈에 보이는 겉면을 깔끔하게 마무리하는 일이에요. 이 탐험에서는 현장 정리와 준공검사까지 마지막 단계에서 함께 살펴봐요.',
+    subs:[['벽 세워 방 나누기',0,.22],['바닥 깔기',.22,.42],['천장·조명 달기',.42,.62],['가구 들이기',.62,1],['크레인 해체',1,1.18],['울타리 치우기',1.18,1.32],['나무·보도 정리',1.32,1.62],['준공검사 통과',1.62,2]],
+    cam:{t:[0,6,1],p:[21,8,23]}, completeCam:{t:[0,6,0],p:[-24,6.5,31]} },
 ];
+
+// Animation coordinates are independent of the six navigation stages.
+const TIMELINE_DURATIONS = [27.3,51.0,40.5,84.0,35.5,32.7,32.7,30.0];
 
 const STAGE_TEXT = {
   ko: STAGES.map(stage => ({short:stage.short, title:stage.title, term:stage.term,
@@ -404,27 +395,17 @@ const STAGE_TEXT = {
     ]
   },
   {
-    "short": "Каркас",
-    "title": "Возводим каркас",
-    "term": "Возведение каркаса",
-    "lead": "Шаг за шагом собираем каркас здания из колонн и перекрытий.",
-    "desc": "① Собираем арматуру колонн и перекрытия. ② Устанавливаем вокруг неё деревянные формы. ③ Заливаем бетон. ④ Когда бетон достаточно затвердеет, снимаем формы. Повторяем эти действия на каждом этаже. Башенный кран поднимает тяжёлые материалы, а бетононасос подаёт бетон наверх по длинной стреле.",
-    "tip": "Временную форму для заливки бетона называют опалубкой. Свежий бетон блестящий и тёмно-серый; по мере твердения он становится светло-серым.",
+    "short": "Каркас и стены",
+    "title": "Возводим каркас и наружные стены",
+    "term": "Каркас и наружные стены",
+    "lead": "Возводим каркас из колонн и перекрытий, затем строим наружные стены и устанавливаем окна.",
+    "desc": "① Собираем арматуру колонн и перекрытия. ② Устанавливаем вокруг неё деревянные формы. ③ Заливаем бетон. ④ Когда бетон достаточно затвердеет, снимаем формы. Повторяем эти действия на каждом этаже. Башенный кран поднимает тяжёлые материалы, а бетононасос подаёт бетон наверх по длинной стреле. Затем устанавливаем строительные леса, возводим наружные стены из кирпича, вставляем окна и укладываем гидроизоляцию крыши.",
+    "tip": "Временную форму для бетона называют опалубкой, а площадки для работы на высоте — строительными лесами.",
     "subs": [
       "Устанавливаем арматуру",
       "Монтируем деревянную опалубку",
       "Заливаем бетон",
-      "Даём затвердеть и снимаем форму"
-    ]
-  },
-  {
-    "short": "Наружные стены",
-    "title": "Строим наружные стены",
-    "term": "Наружные стены",
-    "lead": "Возводим стены вокруг каркаса и устанавливаем окна.",
-    "desc": "Сначала вокруг здания устанавливаем площадки, на которых могут стоять и работать строители. С них укладываем кирпич за кирпичом и возводим наружные стены, затем устанавливаем окна. На крыше укладываем водонепроницаемый слой, чтобы внутрь не попадал дождь.",
-    "tip": "Временные конструкции с площадками для работы на высоте снаружи здания называют строительными лесами.",
-    "subs": [
+      "Даём затвердеть и снимаем форму",
       "Устанавливаем строительные леса",
       "Кладём кирпич",
       "Устанавливаем окна",
@@ -447,26 +428,16 @@ const STAGE_TEXT = {
   },
   {
     "short": "Отделка",
-    "title": "Обустраиваем помещения",
-    "term": "Внутренняя отделка",
-    "lead": "Превращаем пустое пространство в помещения, которыми можно пользоваться.",
-    "desc": "Ставим перегородки, чтобы разделить пространство на комнаты, и укладываем напольное покрытие. Монтируем потолки, закрывающие трубы и провода, и устанавливаем светильники. Затем расставляем столы, стулья и другую мебель — теперь здесь можно находиться и работать.",
-    "tip": "Отделкой называют работы, которые придают видимым поверхностям аккуратный, законченный вид.",
+    "title": "Отделка и завершение строительства",
+    "term": "Отделочные работы",
+    "lead": "Обустраиваем помещения, приводим участок в порядок и завершаем проверку здания.",
+    "desc": "Ставим перегородки, чтобы разделить пространство на комнаты, и укладываем напольное покрытие. Монтируем потолки, закрывающие трубы и провода, и устанавливаем светильники. Затем расставляем столы, стулья и другую мебель — теперь здесь можно находиться и работать. Демонтируем башенный кран и убираем забор. Перед зданием укладываем тротуар и сажаем деревья. В конце уполномоченные органы проверяют, соответствует ли здание проекту и безопасно ли оно. После успешной проверки зданием можно пользоваться.",
+    "tip": "Отделка придаёт поверхностям законченный вид. В этом путешествии последний этап также включает уборку площадки и итоговую приёмку.",
     "subs": [
       "Делим пространство перегородками",
       "Укладываем напольное покрытие",
       "Монтируем потолки и светильники",
-      "Расставляем мебель"
-    ]
-  },
-  {
-    "short": "Завершение",
-    "title": "Готово! Здание можно использовать",
-    "term": "Завершение строительства",
-    "lead": "Убираем строительную технику и благоустраиваем территорию — строительство завершено!",
-    "desc": "Демонтируем башенный кран и убираем забор. Перед зданием укладываем тротуар и сажаем деревья. В конце уполномоченные органы проверяют, соответствует ли здание проекту и безопасно ли оно. После успешной проверки зданием можно пользоваться.",
-    "tip": "Заключительную проверку после окончания строительства называют итоговой приёмкой.",
-    "subs": [
+      "Расставляем мебель",
       "Демонтируем кран",
       "Убираем забор",
       "Сажаем деревья и укладываем тротуар",
@@ -1213,7 +1184,7 @@ const membrane=mesh(new THREE.PlaneGeometry(16,16).rotateX(-Math.PI/2).translate
 membrane.position.set(-8,LT[3]+.015,0);
 
 /* =========================================================
-   6단계: 설비 (배관 · 전기 · 덕트 · 냉난방기 · 엘리베이터)
+   5단계: 설비 (배관 · 전기 · 덕트 · 냉난방기 · 엘리베이터)
    ========================================================= */
 const mep={water:[],elec:[],duct:[],roof:[],fans:[]};
 const ceilY = f=>LT[f]-SLAB-.45;
@@ -1274,7 +1245,7 @@ for(let f=0;f<4;f++){
 }
 
 /* =========================================================
-   8단계: 조경 · 가로등
+   마감공사: 조경 · 가로등
    ========================================================= */
 const trees=[], lamps=[], lampLights=[];
 [[-6.5,12.2],[0.5,12.2],[7.5,12.2],[-11.8,4.5],[-11.8,-3.5],[12.3,4]].forEach(([x,z])=>{
@@ -1411,7 +1382,7 @@ function topLevel(T){
 function setTransp(m,flag){ if(m.transparent!==flag){ m.transparent=flag; m.needsUpdate=true; } }
 function update(T, time, dt){
   // ---------- 땅 / 구덩이
-  digInfo = digTimeline((T-DIG.start)*STAGES[1].dur);
+  digInfo = digTimeline((T-DIG.start)*TIMELINE_DURATIONS[1]);
   const depth = PIT_DEPTH*clamp(digInfo.digs/6);
   pitFloor.position.y = -depth+.001;
   pitFloor.visible = T<2.95;
@@ -1669,9 +1640,9 @@ function update(T, time, dt){
   });
 
   // ---------- 보기 모드 (투시 / 앞벽 열기 / 밤)
-  const xrayTarget = (stageIdx===5 && xray && started) ? 1 : 0;
-  const cutTarget = (stageIdx===6 && cutaway && started) ? 1 : 0;
-  const nightTarget = (stageIdx===7 && night && started) ? 1 : 0;
+  const xrayTarget = (stageIdx===4 && xray && started) ? 1 : 0;
+  const cutTarget = (stageIdx===5 && T<7 && cutaway && started) ? 1 : 0;
+  const nightTarget = (stageIdx===5 && T>=7 && night && started) ? 1 : 0;
   xrayK += (xrayTarget-xrayK)*Math.min(1,dt*4);
   cutK += (cutTarget-cutK)*Math.min(1,dt*5);
   nightK += (nightTarget-nightK)*Math.min(1,dt*2.2);
@@ -1791,7 +1762,7 @@ function layout(){
   camera.setViewOffset(w,h,ox,oy,w,h);
   camera.updateProjectionMatrix();
 }
-addEventListener('resize',()=>{ layout(); if(started && !fly) flyTo(STAGES[stageIdx].cam,.8); });
+addEventListener('resize',()=>{ layout(); if(started && !fly) flyTo(stageCamera(),.8); });
 
 /* =========================================================
    소리 (Web Audio로 직접 합성 – 외부 파일 없음)
@@ -2065,11 +2036,13 @@ function renderStageUI(){
   $('desc').textContent=s.desc;
   $('tip').textContent=s.tip;
   subsEl.innerHTML='';
-  s.subs.forEach(([name,a],k)=>{
+  s.subs.forEach(([name],k)=>{
     const b=document.createElement('button'); b.className='sub'; b.innerHTML=`<i></i><span>${name}</span>`;
     b.addEventListener('click',()=>{
-      if(s.cycle){ const f=clamp(Math.floor((curT-3)/.25),0,3); curT=3+f*.25+a*.25+.0001; }
-      else curT=stageIdx+a+.0001;
+      const [from] = subWindow(s,k);
+      curT=from+.0001;
+      if(s.cycle) camFollow=curT<4;
+      flyTo(stageCamera());
       playing=true; syncPlay(); prevT=curT; sfx('click');
     });
     subsEl.appendChild(b);
@@ -2079,23 +2052,33 @@ function renderStageUI(){
   [...stepper.children].forEach((b,i)=>{ b.classList.toggle('cur',i===stageIdx); b.classList.toggle('done',i<stageIdx); });
   stepper.children[stageIdx].scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
   $('prev').disabled = stageIdx===0;
-  $('next').textContent = t(stageIdx===7?'restart':'next');
+  $('next').textContent = t(stageIdx===STAGES.length-1?'restart':'next');
   syncToggle();
   $('panel').querySelector('.pbody').scrollTop=0;
 }
+function stageCamera(){
+  const s=STAGES[stageIdx];
+  if(s.exteriorCam && curT>=4) return s.exteriorCam;
+  if(s.completeCam && curT>=7) return s.completeCam;
+  return s.cam;
+}
+function toggleMode(){
+  const mode=STAGES[stageIdx].toggle;
+  return mode==='finish' ? (curT<7?'cut':'night') : mode;
+}
 function syncToggle(){
-  const s=STAGES[stageIdx], toggleButton=$('toggle');
-  if(!s.toggle){ toggleButton.style.display='none'; return; }
+  const mode=toggleMode(), toggleButton=$('toggle');
+  if(!mode){ toggleButton.style.display='none'; return; }
   toggleButton.style.display='block';
-  if(s.toggle==='xray'){ toggleButton.textContent = t(xray?'xrayOn':'xrayOff'); toggleButton.classList.toggle('on',xray); }
-  if(s.toggle==='cut'){ toggleButton.textContent = t(cutaway?'cutOn':'cutOff'); toggleButton.classList.toggle('on',cutaway); }
-  if(s.toggle==='night'){ toggleButton.textContent = t(night?'nightOn':'nightOff'); toggleButton.classList.toggle('on',night); }
+  if(mode==='xray'){ toggleButton.textContent = t(xray?'xrayOn':'xrayOff'); toggleButton.classList.toggle('on',xray); }
+  if(mode==='cut'){ toggleButton.textContent = t(cutaway?'cutOn':'cutOff'); toggleButton.classList.toggle('on',cutaway); }
+  if(mode==='night'){ toggleButton.textContent = t(night?'nightOn':'nightOff'); toggleButton.classList.toggle('on',night); }
 }
 $('toggle').addEventListener('click',()=>{
-  const s=STAGES[stageIdx];
-  if(s.toggle==='xray') xray=!xray;
-  if(s.toggle==='cut') cutaway=!cutaway;
-  if(s.toggle==='night'){ night=!night; sfx(night?'night':'day'); } else sfx('click');
+  const mode=toggleMode();
+  if(mode==='xray') xray=!xray;
+  if(mode==='cut') cutaway=!cutaway;
+  if(mode==='night'){ night=!night; sfx(night?'night':'day'); } else sfx('click');
   syncToggle();
 });
 function syncPlay(){
@@ -2104,7 +2087,7 @@ function syncPlay(){
   button.setAttribute('aria-pressed',String(playing));
 }
 function goStage(i){
-  stageIdx=clamp(i,0,7); curT=stageIdx; playing=true;
+  stageIdx=clamp(i,0,STAGES.length-1); curT=STAGES[stageIdx].start; playing=true;
   xray=true; cutaway=true; night=false;
   document.querySelectorAll('.lbl.open').forEach(x=>x.classList.remove('open'));
   camFollow = stageIdx===3;
@@ -2112,12 +2095,15 @@ function goStage(i){
   sfx('chime');
 }
 $('prev').addEventListener('click',()=>goStage(stageIdx-1));
-$('next').addEventListener('click',()=>goStage(stageIdx===7?0:stageIdx+1));
+$('next').addEventListener('click',()=>goStage(stageIdx===STAGES.length-1?0:stageIdx+1));
 $('replay').addEventListener('click',()=>goStage(stageIdx));
-$('play').addEventListener('click',()=>{ if(!playing && curT>=stageIdx+1-1e-4){ curT=stageIdx; prevT=curT; } playing=!playing; syncPlay(); sfx('click'); });
-$('btnCam').addEventListener('click',()=>{ flyTo(started?STAGES[stageIdx].cam:INTRO_CAM,1.2); sfx('whoosh'); });
+$('play').addEventListener('click',()=>{
+  if(!playing && curT>=STAGES[stageIdx].end-1e-4){ goStage(stageIdx); return; }
+  playing=!playing; syncPlay(); sfx('click');
+});
+$('btnCam').addEventListener('click',()=>{ flyTo(started?stageCamera():INTRO_CAM,1.2); sfx('whoosh'); });
 $('btnLabels').addEventListener('click',e=>{ document.body.classList.toggle('nolabels'); e.currentTarget.classList.toggle('on'); sfx('click'); });
-document.addEventListener('keydown',e=>{ if(!started || e.target.closest('select,input,textarea,[contenteditable="true"]')) return; if(e.key==='ArrowRight') goStage(Math.min(7,stageIdx+1)); if(e.key==='ArrowLeft') goStage(stageIdx-1); if(e.key===' '){ e.preventDefault(); $('play').click(); } });
+document.addEventListener('keydown',e=>{ if(!started || e.target.closest('select,input,textarea,[contenteditable="true"]')) return; if(e.key==='ArrowRight') goStage(Math.min(STAGES.length-1,stageIdx+1)); if(e.key==='ArrowLeft') goStage(stageIdx-1); if(e.key===' '){ e.preventDefault(); $('play').click(); } });
 
 function begin(){
   if(started) return;
@@ -2126,20 +2112,28 @@ function begin(){
 }
 $('start').addEventListener('click',()=>{ initAudio(); begin(); goStage(0); });
 
+// The first four frame tasks repeat on each floor; exterior tasks follow once.
+function subWindow(stage,index){
+  const [,a,b]=stage.subs[index];
+  if(stage.cycle && index<4){
+    const floor=clamp(Math.floor((curT-stage.start)/.25),0,3);
+    return [stage.start+floor*.25+a*.25,stage.start+floor*.25+b*.25];
+  }
+  return [stage.start+a,stage.start+b];
+}
 function updateSubUI(){
   const s=STAGES[stageIdx];
-  const local = clamp(curT-stageIdx);
-  let u = local;
   if(s.cycle){
-    const f=clamp(Math.floor(local*4),0,3); u = local>=1?1:(local*4-f);
-    $('floorinfo').innerHTML = local>=1 ? t('floorComplete') : t('floorProgress',{floor:f+1});
+    const floor=clamp(Math.floor((curT-s.start)*4),0,3);
+    $('floorinfo').innerHTML = curT>=4 ? t('floorComplete') : t('floorProgress',{floor:floor+1});
   }
   [...subsEl.children].forEach((b,k)=>{
-    const [,a,e]=s.subs[k]; const p=clamp((u-a)/(e-a));
+    const [a,e]=subWindow(s,k), p=clamp((curT-a)/(e-a));
     b.style.setProperty('--p',p.toFixed(3));
-    b.classList.toggle('now', p>0&&p<1); b.classList.toggle('fin', p>=1 && !(s.cycle&&local<1&&false));
+    b.classList.toggle('now',p>0&&p<1); b.classList.toggle('fin',p>=1);
   });
-  $('approved').classList.toggle('show', stageIdx===7 && curT>=7.8);
+  syncToggle();
+  $('approved').classList.toggle('show', stageIdx===STAGES.length-1 && curT>=7.8);
 }
 
 /* =========================================================
@@ -2182,8 +2176,12 @@ let elapsed=0;
 function frame(){
   const dt=Math.min(clock.getDelta(),.05); elapsed+=dt;
   if(started && playing){
-    curT += dt/STAGES[stageIdx].dur;
-    if(curT>=stageIdx+1){ curT=stageIdx+1; playing=false; syncPlay(); }
+    const before=curT;
+    const phase=clamp(Math.floor(curT),0,TIMELINE_DURATIONS.length-1);
+    curT += dt/TIMELINE_DURATIONS[phase];
+    if(curT>=STAGES[stageIdx].end){ curT=STAGES[stageIdx].end; playing=false; syncPlay(); }
+    if(stageIdx===3 && curT>=4 && camFollow){ camFollow=false; flyTo(stageCamera()); }
+    if(stageIdx===5 && before<7 && curT>=7) flyTo(stageCamera());
   }
   if(fly){
     fly.t+=dt/fly.dur; const k=ease(clamp(fly.t));
@@ -2191,7 +2189,7 @@ function frame(){
     controls.target.lerpVectors(fly.fromT,fly.toT,k);
     if(fly.t>=1) fly=null;
   }
-  if(camFollow && !fly && stageIdx===3){
+  if(camFollow && !fly && stageIdx===3 && curT<4){
     const want=clamp(topLevel(curT)-.5,3,13), dy=(want-controls.target.y)*Math.min(1,dt*1.2);
     controls.target.y+=dy; camera.position.y+=dy;
   }
@@ -2230,7 +2228,7 @@ refreshLanguage();
 
 requestAnimationFrame(()=>{ $('loading').classList.add('gone'); });
 frame();
-window.__dbg = { SND, THREE, scene, camera, mat, snapCam:()=>{ if(fly) fly.t=1; }, modesNow:()=>{ xrayK=(stageIdx===5&&xray)?1:0; cutK=(stageIdx===6&&cutaway)?1:0; nightK=(stageIdx===7&&night)?1:0; }, setT:(t)=>{curT=t;}, goStage, begin, get T(){return curT;}, set playing(v){playing=v;}, setNight:(v)=>{night=v;}, };
+window.__dbg = { SND, THREE, scene, camera, mat, snapCam:()=>{ if(fly) fly.t=1; }, modesNow:()=>{ xrayK=(stageIdx===4&&xray)?1:0; cutK=(stageIdx===5&&curT<7&&cutaway)?1:0; nightK=(stageIdx===5&&curT>=7&&night)?1:0; }, setT:(t)=>{curT=t;}, goStage, begin, get T(){return curT;}, set playing(v){playing=v;}, setNight:(v)=>{night=v;}, };
 </script>
 </body>
 </html>
