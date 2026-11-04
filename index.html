@@ -1,0 +1,2237 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=017000a0-f645-4dab-9afb-0fd311f90a19
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=e2f98ec9-c887-4afe-a302-cada858af09f
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>건물이 지어지는 과정 | 시공 8단계</title>
+<meta name="description" content="고등학생을 위한 건물 시공 과정 3D 탐험 – 공사 준비부터 완공까지 8단계">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --yellow:#FFC21A; --yellow-d:#e2a600; --ink:#1c2026; --sub:#5a626e; --line:#e4e6ea;
+  --card:rgba(255,255,255,.95); --shadow:0 10px 30px rgba(20,30,45,.16);
+  --pw:392px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:#dfe8ef;color:var(--ink);
+  font-family:"Pretendard Variable",Pretendard,-apple-system,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
+  -webkit-font-smoothing:antialiased;user-select:text;-webkit-user-select:text}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer;padding:0}
+#stage{position:fixed;inset:0;touch-action:none}
+#stage canvas{display:block}
+
+/* ---------- top bar ---------- */
+.topbar{position:fixed;top:12px;left:12px;right:12px;display:flex;gap:10px;align-items:center;z-index:5;pointer-events:none}
+.topbar>*{pointer-events:auto}
+.brand{display:flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border-radius:14px;padding:10px 14px;font-weight:800;font-size:15px;white-space:nowrap;box-shadow:var(--shadow)}
+.brand i{width:22px;height:22px;border-radius:6px;background:repeating-linear-gradient(-45deg,var(--yellow) 0 5px,#1c2026 5px 10px)}
+.stepper{flex:1;display:flex;gap:4px;background:var(--card);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-radius:14px;padding:5px;box-shadow:var(--shadow);overflow-x:auto;scrollbar-width:none}
+.stepper::-webkit-scrollbar{display:none}
+.stepper,.stepper *{user-select:none;-webkit-user-select:none}
+.stepper{cursor:grab;touch-action:pan-x}
+.stepper .st{cursor:inherit}
+.stepper.dragging,.stepper.dragging .st{cursor:grabbing}
+.st{flex:1 0 auto;min-width:64px;display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:10px;font-size:14px;font-weight:600;color:var(--sub);transition:background .2s,color .2s}
+.st b{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:#eef0f3;font-size:12px;font-weight:800;color:var(--sub);flex:none}
+.st.done b{background:#2f3540;color:#fff}
+.st.cur{background:var(--yellow);color:var(--ink)}
+.st.cur b{background:var(--ink);color:var(--yellow)}
+.iconbtn{width:46px;height:46px;flex:none;display:grid;place-items:center;border-radius:14px;background:var(--card);box-shadow:var(--shadow);font-size:20px}
+.iconbtn.on{background:var(--yellow)}
+
+/* ---------- panel ---------- */
+.panel{position:fixed;z-index:6;background:var(--card);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:var(--shadow);display:flex;flex-direction:column;transition:transform .45s cubic-bezier(.2,.8,.2,1),opacity .3s}
+.panel.hidden{opacity:0;pointer-events:none}
+.pbody{overflow-y:auto;padding:22px 22px 10px;touch-action:pan-y;-webkit-overflow-scrolling:touch;flex:1}
+.meta{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.badge{background:var(--ink);color:var(--yellow);font-weight:800;font-size:13px;letter-spacing:.06em;padding:5px 10px;border-radius:8px}
+.term{font-size:13px;font-weight:700;color:var(--sub);background:#f0f2f5;padding:5px 9px;border-radius:8px}
+.panel h2{margin:4px 0 6px;font-size:28px;line-height:1.25;font-weight:850;letter-spacing:-.02em}
+.lead{margin:0 0 14px;font-size:16.5px;font-weight:600;color:#38404b;line-height:1.5}
+.subs{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;counter-reset:sub}
+.sub{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;width:100%;text-align:left;border-radius:11px;background:#f0f2f5;padding:9px 12px;font-size:15px;font-weight:700;color:#4a525e;min-height:44px;counter-increment:sub}
+.sub::before{content:counter(sub);position:relative;z-index:1;flex:none;display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:#fff;color:var(--sub);font-size:12.5px;font-weight:800}
+.sub.now::before,.sub.fin::before{background:var(--ink);color:var(--yellow)}
+.sub i{position:absolute;inset:0;width:calc(var(--p,0)*100%);background:rgba(255,194,26,.55);transition:width .12s linear}
+.sub span{position:relative;flex:1}
+.sub.now{color:var(--ink);box-shadow:inset 0 0 0 2px var(--yellow-d)}
+.sub.fin{color:var(--ink)}
+.sub.fin span::after{content:"✓";float:right;font-weight:900}
+.floorinfo{font-size:14px;font-weight:700;color:var(--sub);margin:-4px 0 12px;display:none}
+.floorinfo b{color:var(--ink);background:var(--yellow);padding:2px 8px;border-radius:6px}
+.desc{margin:0 0 14px;font-size:16px;line-height:1.72;color:#2b313a;word-break:keep-all}
+.tip{display:flex;gap:10px;background:#fff7dc;border:1px solid #f5dd8b;border-radius:14px;padding:12px 14px;font-size:15px;line-height:1.55;margin-bottom:12px;word-break:keep-all}
+.tip b{flex:none;font-weight:800}
+.legend{display:none;flex-wrap:wrap;gap:8px 14px;margin:0 0 12px;font-size:14.5px;font-weight:700}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:22px;height:8px;border-radius:4px}
+.toggle{display:none;width:100%;min-height:52px;border-radius:14px;background:var(--ink);color:#fff;font-weight:800;font-size:16px;margin-bottom:6px}
+.toggle.on{background:var(--yellow);color:var(--ink)}
+.controls{display:grid;grid-template-columns:1fr 56px 56px 1.4fr;gap:8px;padding:12px 22px 18px;border-top:1px solid var(--line)}
+.controls button{min-height:56px;border-radius:14px;font-weight:800;font-size:16px;background:#eef0f3}
+.controls .next{background:var(--yellow);color:var(--ink)}
+.controls button:disabled{opacity:.35}
+.controls .ic{font-size:20px}
+
+/* landscape tablet / desktop: panel on right */
+@media (orientation:landscape) and (min-width:760px){
+  .panel{top:12px;right:12px;bottom:12px;width:var(--pw);border-radius:22px}
+  .topbar{right:calc(var(--pw) + 24px)}
+}
+@media (orientation:landscape) and (min-width:760px) and (max-height:620px){
+  .panel h2{font-size:24px}.desc{font-size:15px;line-height:1.6}.pbody{padding:16px 18px 8px}
+}
+@media (orientation:landscape) and (min-width:760px) and (max-width:1500px){ .st{min-width:auto} .st span{display:none} .st.cur span{display:inline} }
+/* portrait or narrow: bottom sheet */
+@media (orientation:portrait),(max-width:759px){
+  .panel{left:0;right:0;bottom:0;max-height:43vh;border-radius:22px 22px 0 0;padding-bottom:env(safe-area-inset-bottom)}
+  .brand span{display:none}
+  .st{min-width:auto}
+  .st span{display:none}
+  .st.cur span{display:inline}
+  .panel h2{font-size:24px}
+}
+
+/* ---------- 3D labels ---------- */
+#labels{position:fixed;inset:0;pointer-events:none;z-index:3}
+.lbl{position:absolute;left:0;top:0;transform:translate(-50%,-100%);pointer-events:auto;display:flex;flex-direction:column;align-items:center}
+.lbl .pill{display:flex;align-items:center;gap:6px;background:rgba(28,32,38,.88);color:#fff;font-size:14px;font-weight:700;padding:7px 11px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.2)}
+.lbl .pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--yellow)}
+.lbl .stem{width:2px;height:14px;background:rgba(28,32,38,.6)}
+.lbl .d{display:none;max-width:220px;white-space:normal;background:#fff;color:var(--ink);font-size:14px;font-weight:600;line-height:1.5;padding:10px 12px;border-radius:12px;margin-bottom:6px;box-shadow:0 6px 18px rgba(0,0,0,.18);word-break:keep-all}
+.lbl.open .d{display:block}
+.lbl.open .pill{background:var(--yellow);color:var(--ink)}
+.lbl.open .pill::before{background:var(--ink)}
+body.nolabels #labels{display:none}
+
+.hint{position:fixed;left:14px;bottom:14px;z-index:4;font-size:13px;font-weight:700;color:#38404b;background:rgba(255,255,255,.8);padding:8px 12px;border-radius:10px;pointer-events:none;transition:opacity .6s}
+@media (orientation:portrait),(max-width:759px){.hint{bottom:auto;top:72px}}
+
+.toast{position:fixed;z-index:8;left:50%;top:76px;transform:translate(-50%,-8px);opacity:0;pointer-events:none;background:var(--ink);color:#fff;font-weight:700;font-size:15px;padding:10px 16px;border-radius:12px;transition:opacity .25s,transform .25s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+/* ---------- concrete gauge ---------- */
+.gauge{position:fixed;left:0;top:0;z-index:4;pointer-events:none;display:none;flex-direction:column;align-items:center;transform:translate(-50%,-100%)}
+.gauge .box{min-width:210px;max-width:260px;background:rgba(255,255,255,.96);border-radius:14px;padding:10px 13px 11px;box-shadow:0 8px 24px rgba(0,0,0,.2);border:2px solid var(--ink)}
+.gauge .t{font-size:15.5px;font-weight:850;color:var(--ink);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.gauge .s{font-size:13px;font-weight:650;color:#4a525e;margin-top:3px;line-height:1.4;word-break:keep-all}
+.gauge .bar{margin-top:7px;height:10px;border-radius:6px;background:#e6e8ec;overflow:hidden}
+.gauge .bar i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#5e5c58,#8e8b85)}
+.gauge.cure .bar i{background:linear-gradient(90deg,#6e6c68,#dedbd3)}
+.gauge.cure{}
+.gauge .stem{width:2px;height:16px;background:var(--ink)}
+.gauge .dot{width:10px;height:10px;border-radius:50%;background:var(--yellow);border:2px solid var(--ink);margin-top:-2px}
+/* ---------- approval stamp ---------- */
+.approved{position:fixed;z-index:4;left:50%;top:92px;transform:translateX(-50%) scale(.6) rotate(-6deg);opacity:0;pointer-events:none;
+  border:4px solid #d0342c;color:#d0342c;background:rgba(255,255,255,.92);border-radius:16px;padding:10px 22px;text-align:center;transition:opacity .4s,transform .5s cubic-bezier(.2,1.6,.4,1)}
+.approved.show{opacity:1;transform:translateX(-50%) scale(1) rotate(-6deg)}
+.approved b{display:block;font-size:30px;font-weight:900;letter-spacing:.08em}
+.approved small{font-size:14px;font-weight:700}
+@media (orientation:landscape) and (min-width:760px){.approved{left:calc((100% - var(--pw) - 24px)/2)}}
+
+/* ---------- intro ---------- */
+.intro{position:fixed;inset:0;z-index:10;display:flex;align-items:flex-end;padding:6vh 6vw;
+  background:linear-gradient(90deg,rgba(20,24,30,.78) 0%,rgba(20,24,30,.45) 48%,rgba(20,24,30,0) 80%);color:#fff;transition:opacity .6s}
+.intro.gone{opacity:0;pointer-events:none}
+.intro .box{max-width:560px}
+.intro .kick{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px;letter-spacing:.08em;color:var(--yellow);margin-bottom:12px}
+.intro .kick i{width:28px;height:8px;border-radius:2px;background:repeating-linear-gradient(-45deg,var(--yellow) 0 5px,transparent 5px 10px)}
+.intro h1{margin:0 0 14px;font-size:clamp(34px,6vw,58px);line-height:1.12;font-weight:900;letter-spacing:-.03em;word-break:keep-all}
+.intro p{margin:0 0 26px;font-size:clamp(16px,2.2vw,19px);line-height:1.6;color:#e8ecf1;word-break:keep-all}
+.intro .go{display:inline-flex;align-items:center;gap:10px;background:var(--yellow);color:var(--ink);font-weight:900;font-size:20px;padding:18px 30px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.intro .steps8{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px}
+.intro .steps8 span{font-size:13.5px;font-weight:700;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:6px 10px;border-radius:999px}
+.loading{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#dfe8ef;font-weight:800;color:var(--sub);transition:opacity .5s}
+.loading.gone{opacity:0;pointer-events:none}
+
+/* Language selection remains available before and during the simulation. */
+.language-switch{position:fixed;z-index:25;top:12px;right:12px;display:flex;align-items:center;gap:9px;
+  padding:8px 12px;background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);font-size:14px;font-weight:800}
+.language-switch select{font:inherit;color:var(--ink);background:#f0f2f5;border:1px solid #c9ced6;border-radius:8px;padding:7px 30px 7px 10px;min-height:38px;cursor:pointer}
+.language-switch select:focus-visible,button:focus-visible{outline:3px solid #1673c5;outline-offset:3px}
+.topbar{top:78px}
+.stepper{min-width:0}
+.meta{flex-wrap:wrap}.badge{flex:none}.term{min-width:0}
+.intro{overflow-y:auto}.intro .box{width:100%}
+html[lang="ru"] .desc,html[lang="ru"] .tip,html[lang="ru"] .intro h1,html[lang="ru"] .intro p,
+html[lang="ru"] .lbl .d,html[lang="ru"] .gauge .s{word-break:normal;overflow-wrap:break-word;hyphens:auto}
+html[lang="ru"] .tip{flex-wrap:wrap;gap:6px}
+html[lang="ru"] .gauge .t{white-space:normal;line-height:1.3}
+html[lang="ru"] .gauge .box{max-width:min(300px,calc(100vw - 32px))}
+html[lang="ru"] .lbl .pill{max-width:min(310px,calc(100vw - 24px));white-space:normal;text-align:center}
+html[lang="ru"] .lbl .pill::before{flex:none}
+html[lang="ru"] .approved{max-width:calc(100vw - 32px);width:max-content}
+html[lang="ru"] .approved b{font-size:clamp(18px,2vw,25px);letter-spacing:.01em}
+html[lang="ru"] .approved small{display:block;font-size:13px}
+.hint{max-width:calc(100vw - 28px)}
+@media (orientation:landscape) and (min-width:760px){.panel{top:78px}}
+@media (orientation:landscape) and (min-width:760px) and (max-width:1180px){.brand span{display:none}}
+@media (orientation:portrait),(max-width:759px){
+  .topbar{gap:5px;left:8px;right:8px}
+  .brand{padding:10px}.iconbtn{width:40px;height:44px;border-radius:12px}
+  .st{padding:7px 6px}.st.cur span{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hint{top:136px;font-size:12px}
+  .intro{align-items:flex-start;padding:204px 24px 28px}
+  .intro .kick{letter-spacing:.02em}.intro h1{font-size:clamp(32px,7vw,48px)}
+  .intro .go{font-size:18px;padding:16px 24px}
+  .controls{grid-template-columns:1fr 44px 44px 1.15fr;gap:6px;padding:10px 14px 14px}
+  .controls button{font-size:14px;min-height:50px}.controls .ic{font-size:20px}
+  .approved{top:178px}
+}
+</style>
+<script type="importmap">
+{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
+</script>
+</head>
+<body>
+<div class="language-switch">
+  <label for="languageSelect">🌐 <span data-i18n="language">언어</span></label>
+  <select id="languageSelect" data-i18n-aria-label="chooseLanguage" aria-label="언어 선택">
+    <option value="ko" lang="ko">한국어</option>
+    <option value="ru" lang="ru">Русский</option>
+  </select>
+</div>
+<div id="stage"></div>
+<div id="labels"></div>
+
+<div class="topbar">
+  <div class="brand"><i></i><span data-i18n="brand">건물이 지어지는 과정</span></div>
+  <nav class="stepper" id="stepper"></nav>
+  <button class="iconbtn on" id="btnLabels" data-i18n-title="labelsTitle" data-i18n-aria-label="labelsAria" title="이름표 보기/숨기기" aria-label="이름표">🏷️</button>
+  <button class="iconbtn on" id="btnSound" data-i18n-title="soundTitle" data-i18n-aria-label="soundAria" title="소리 (배경음·효과음)" aria-label="소리">🔊</button>
+  <button class="iconbtn" id="btnCam" data-i18n-title="camera" data-i18n-aria-label="camera" title="시점 되돌리기" aria-label="시점 되돌리기">🎥</button>
+</div>
+
+<div class="hint" id="hint" data-i18n="hint">👆 화면을 드래그하면 돌려 볼 수 있어요 · 두 손가락으로 확대</div>
+<div class="toast" id="toast"></div>
+<div class="gauge" id="gauge"><div class="box"><div class="t" id="gT"></div><div class="s" id="gS"></div><div class="bar"><i id="gB"></i></div></div><div class="stem"></div><div class="dot"></div></div>
+<div class="approved" id="approved"><b data-i18n="approved">사용 승인</b><small data-i18n="approvedDetail">준공검사 통과 · 안전 확인 완료</small></div>
+
+<aside class="panel hidden" id="panel">
+  <div class="pbody">
+    <div class="meta"><span class="badge" id="badge">STEP 1</span><span class="term" id="term">가설공사</span></div>
+    <h2 id="title">공사 준비하기</h2>
+    <p class="lead" id="lead"></p>
+    <div class="subs" id="subs"></div>
+    <div class="floorinfo" id="floorinfo"></div>
+    <p class="desc" id="desc"></p>
+    <div class="legend" id="legend">
+      <span><i style="background:#2f8de4"></i><span data-i18n="water">수도관 (물)</span></span>
+      <span><i style="background:#f6c315"></i><span data-i18n="electricity">전기선</span></span>
+      <span><i style="background:#a9b2bb"></i><span data-i18n="air">공기 통로</span></span>
+      <span><i style="background:#cfd6dd;border:1px solid #8a949e"></i><span data-i18n="elevator">엘리베이터</span></span>
+    </div>
+    <button class="toggle" id="toggle"></button>
+    <div class="tip"><b data-i18n="tipHeading">💡 알아두기</b><span id="tip"></span></div>
+  </div>
+  <div class="controls">
+    <button id="prev" data-i18n="previous">◀ 이전</button>
+    <button class="ic" id="play" data-i18n-title="playPause" data-i18n-aria-label="playPause" title="재생/멈춤" aria-label="재생/멈춤">⏸</button>
+    <button class="ic" id="replay" data-i18n-title="replayTitle" data-i18n-aria-label="replayAria" title="이 단계 다시 보기" aria-label="다시 보기">↻</button>
+    <button class="next" id="next">다음 단계 ▶</button>
+  </div>
+</aside>
+
+<div class="intro" id="intro">
+  <div class="box">
+    <div class="kick"><i></i><span data-i18n="introKick">건설 기술 · 시공 과정</span></div>
+    <h1 data-i18n-html="introTitle">건물은 어떻게<br>지어질까?</h1>
+    <p data-i18n-html="introDescription">텅 빈 땅에서 4층 건물이 완성되기까지,<br>실제 공사 현장의 순서를 8단계로 따라가 봐요.</p>
+    <div class="steps8"><span data-i18n="introStage1">1 가설공사</span><span data-i18n="introStage2">2 토공사</span><span data-i18n="introStage3">3 기초공사</span><span data-i18n="introStage4">4 골조공사(뼈대)</span><span data-i18n="introStage5">5 골조공사(외벽)</span><span data-i18n="introStage6">6 설비공사</span><span data-i18n="introStage7">7 실내 및 마감공사</span><span data-i18n="introStage8">8 준공(완성)</span></div>
+    <button class="go" id="start" data-i18n="start">🚧 공사 시작하기</button>
+  </div>
+</div>
+<div class="loading" id="loading" data-i18n="loading">공사 현장을 준비하고 있어요…</div>
+
+<script>
+(() => {
+  'use strict';
+  const messages = {"ko":{"pageTitle":"건물이 지어지는 과정 | 시공 8단계","pageDescription":"고등학생을 위한 건물 시공 과정 3D 탐험 – 공사 준비부터 완공까지 8단계","brand":"건물이 지어지는 과정","language":"언어","chooseLanguage":"언어 선택","labelsTitle":"이름표 보기/숨기기","labelsAria":"이름표","soundTitle":"소리 (배경음·효과음)","soundAria":"소리","camera":"시점 되돌리기","hint":"👆 화면을 드래그하면 돌려 볼 수 있어요 · 두 손가락으로 확대","approved":"사용 승인","approvedDetail":"준공검사 통과 · 안전 확인 완료","water":"수도관 (물)","electricity":"전기선","air":"공기 통로","elevator":"엘리베이터","tipHeading":"💡 알아두기","previous":"◀ 이전","next":"다음 단계 ▶","restart":"처음부터 ↺","playPause":"재생/멈춤","pause":"일시 정지","resume":"재생","replayTitle":"이 단계 다시 보기","replayAria":"다시 보기","introKick":"건설 기술 · 시공 과정","introTitle":"건물은 어떻게<br>지어질까?","introDescription":"텅 빈 땅에서 4층 건물이 완성되기까지,<br>실제 공사 현장의 순서를 8단계로 따라가 봐요.","introStage1":"1 가설공사","introStage2":"2 토공사","introStage3":"3 기초공사","introStage4":"4 골조공사(뼈대)","introStage5":"5 골조공사(외벽)","introStage6":"6 설비공사","introStage7":"7 실내 및 마감공사","introStage8":"8 준공(완성)","start":"🚧 공사 시작하기","loading":"공사 현장을 준비하고 있어요…","badge":"STEP {step} / 8","xrayOn":"🔍 벽 속 보는 중 (끄기)","xrayOff":"🔍 벽 속 들여다보기","cutOn":"🏠 앞벽 다시 닫기","cutOff":"🏠 앞벽 열고 안쪽 보기","nightOn":"☀️ 낮으로 바꾸기","nightOff":"🌙 밤 풍경 보기","soundOff":"소리 끔","soundEffects":"효과음만 켜짐","soundAll":"배경음 + 효과음 켜짐","foundationPour":"🪣 콘크리트 붓는 중","foundationPourDetail":"철근이 콘크리트 속에 잠겨요","foundationCure":"⏳ 굳히는 중 · {day}일째","foundationCured":"✅ 단단하게 다 굳었어요!","foundationCureDetail":"물을 뿌려 촉촉하게 지켜요 (약 28일이면 튼튼)","foundationCuredDetail":"이제 이 위에 건물을 올려요","columnPour":"🪣 {floor}층 기둥에 콘크리트 붓는 중","columnPourDetail":"나무 틀 속을 아래부터 꽉 채워요","slabPour":"🪣 {floor}층 바닥에 콘크리트 붓는 중","slabPourDetail":"한 줄씩 지그재그로 고르게 펴요","floorCure":"⏳ {floor}층 굳히는 중 · {day}일째","floorCureDetail":"물을 뿌려 촉촉하게 지켜요. 색이 밝아질수록 단단해져요","removeForms":"✅ 다 굳었어요! 나무 틀 떼기","removeFormsDetail":"틀을 떼어 내면 단단한 기둥과 바닥만 남아요","floorComplete":"<b>4층 + 지붕까지 완료!</b>","floorProgress":"지금 <b>{floor}층</b> 작업 중 (전체 4층)","fenceSign":"안전제일","officeSign":"현장사무소"},"ru":{"pageTitle":"Как строят здания | 8 этапов строительства","pageDescription":"3D-путешествие по стройплощадке для старшеклассников: 8 этапов от подготовки до готового здания","brand":"Как строят здания","language":"Язык","chooseLanguage":"Выбрать язык","labelsTitle":"Показать или скрыть подписи","labelsAria":"Подписи объектов","soundTitle":"Звук: музыка и звуковые эффекты","soundAria":"Звук","camera":"Вернуть исходный ракурс","hint":"👆 Перетаскивайте, чтобы вращать вид · Разведите два пальца для увеличения","approved":"ВВОД В ЭКСПЛУАТАЦИЮ","approvedDetail":"Итоговая проверка пройдена · Безопасность подтверждена","water":"Водопровод (вода)","electricity":"Электропроводка","air":"Воздуховоды","elevator":"Лифт","tipHeading":"💡 Полезно знать","previous":"◀ Назад","next":"Далее ▶","restart":"Сначала ↺","playPause":"Воспроизведение / пауза","pause":"Приостановить","resume":"Продолжить","replayTitle":"Повторить этот этап","replayAria":"Повторить этап","introKick":"Строительные технологии · Этапы строительства","introTitle":"Как строят<br>здания?","introDescription":"Как на пустом участке появляется четырёхэтажное здание?<br>Пройдём 8 этапов в той же последовательности, что и на настоящей стройке.","introStage1":"1 Подготовка","introStage2":"2 Земляные работы","introStage3":"3 Фундамент","introStage4":"4 Каркас","introStage5":"5 Наружные стены","introStage6":"6 Коммуникации","introStage7":"7 Внутренняя отделка","introStage8":"8 Завершение","start":"🚧 Начать стройку","loading":"Готовим строительную площадку…","badge":"ЭТАП {step} / 8","xrayOn":"🔍 Скрыть то, что внутри стен","xrayOff":"🔍 Заглянуть внутрь стен","cutOn":"🏠 Вернуть переднюю стену","cutOff":"🏠 Открыть вид внутрь","nightOn":"☀️ Включить дневной вид","nightOff":"🌙 Посмотреть ночной вид","soundOff":"Звук выключен","soundEffects":"Включены только звуковые эффекты","soundAll":"Включены музыка и звуковые эффекты","foundationPour":"🪣 Заливка бетона","foundationPourDetail":"Бетон постепенно покрывает арматуру","foundationCure":"⏳ Твердение бетона · День {day}","foundationCured":"✅ Бетон набрал прочность!","foundationCureDetail":"Увлажняем бетон. Примерно через 28 дней он набирает прочность","foundationCuredDetail":"Теперь на этом основании можно возводить здание","columnPour":"🪣 Бетонирование колонн · Этаж {floor}","columnPourDetail":"Заполняем деревянную опалубку снизу вверх","slabPour":"🪣 Бетонирование перекрытия · Этаж {floor}","slabPourDetail":"Равномерно распределяем бетон рядами, зигзагом","floorCure":"⏳ Твердение · Этаж {floor} · День {day}","floorCureDetail":"Увлажняем бетон. По мере твердения он становится светлее","removeForms":"✅ Бетон затвердел! Снимаем опалубку","removeFormsDetail":"После снятия формы остаются прочные колонны и перекрытие","floorComplete":"<b>Все 4 этажа и крыша готовы!</b>","floorProgress":"Строим <b>этаж {floor}</b> из 4","fenceSign":"БЕЗОПАСНОСТЬ|ПРЕЖДЕ ВСЕГО","officeSign":"ШТАБ СТРОЙКИ"}};
+  const storageKey = 'construction-simulation-language';
+  const supported = language => language === 'ko' || language === 'ru';
+  let savedLanguage = 'ko';
+  try { savedLanguage = localStorage.getItem(storageKey) || 'ko'; } catch (_) {}
+  const requested = new URLSearchParams(location.search).get('lang');
+  let language = supported(requested) ? requested : supported(savedLanguage) ? savedLanguage : 'ko';
+  const t = (key, values = {}) => {
+    const text = messages[language][key] ?? messages.ko[key] ?? key;
+    return text.replace(/\{(\w+)\}/g, (match, name) => String(values[name] ?? match));
+  };
+  function applyStatic() {
+    document.documentElement.lang = language;
+    document.title = t('pageTitle');
+    document.querySelector('meta[name="description"]').content = t('pageDescription');
+    document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.dataset.i18n); });
+    // HTML translations are fixed, trusted strings bundled in this file.
+    document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.dataset.i18nHtml); });
+    for (const attribute of ['title', 'aria-label']) {
+      document.querySelectorAll(`[data-i18n-${attribute}]`).forEach(el => {
+        el.setAttribute(attribute, t(el.getAttribute(`data-i18n-${attribute}`)));
+      });
+    }
+    document.getElementById('languageSelect').value = language;
+  }
+  function setLanguage(nextLanguage) {
+    if (!supported(nextLanguage)) return;
+    language = nextLanguage;
+    try { localStorage.setItem(storageKey, language); } catch (_) {}
+    try {
+      const url = new URL(location.href);
+      url.searchParams.set('lang', language);
+      history.replaceState(null, '', url);
+    } catch (_) {}
+    applyStatic();
+    window.dispatchEvent(new CustomEvent('constructionlanguagechange', {detail: {language}}));
+  }
+  window.constructionI18n = {t, applyStatic, setLanguage, get language() { return language; }};
+  document.getElementById('languageSelect').addEventListener('change', event => setLanguage(event.target.value));
+  applyStatic();
+})();
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+const I18N = window.constructionI18n;
+const t = I18N.t;
+
+/* =========================================================
+   단계 데이터
+   ========================================================= */
+const STAGES = [
+  { short:'가설공사', title:'공사 준비하기', term:'가설공사', dur:27.3,
+    lead:'공사를 시작하기 전에 현장을 안전하게 정리해요.',
+    desc:'먼저 공사장 둘레에 높은 울타리를 세워요. 지나가는 사람이 다치지 않게 막기 위해서예요. 일하는 사람들이 쓸 임시 사무실과 화장실을 놓고, 측량기로 땅을 재서 건물이 들어설 자리를 정확하게 표시해요.',
+    tip:'울타리나 임시 사무실처럼 공사하는 동안만 쓰고 끝나면 치우는 시설을 ‘가설’ 시설이라고 해요.',
+    subs:[['울타리 세우기',0,.33],['임시 사무실 놓기',.33,.47],['건물 자리 표시',.47,1]],
+    cam:{t:[0,1,0],p:[24,22,30]} },
+  { short:'토공사', title:'땅 파기', term:'토공사', dur:51.0,
+    lead:'건물이 들어갈 자리의 흙을 파내요.',
+    desc:'깊게 파면 옆의 흙이 무너질 수 있어요. 그래서 먼저 철 기둥을 박고 나무판을 끼워 흙을 막는 벽을 만들어요. 그다음 굴착기가 땅을 파고, 파낸 흙은 덤프트럭이 실어 날라요.',
+    tip:'흙이 무너지지 않게 막는 벽을 ‘흙막이’라고 불러요.',
+    subs:[['흙 막는 벽 세우기',0,.17],['첫 번째 트럭에 흙 싣기',.17,.55],['두 번째 트럭에 흙 싣기',.55,.93],['장비 철수',.93,1]],
+    cam:{t:[7,-.5,9.5],p:[-7,15,33]} },
+  { short:'기초공사', title:'튼튼한 기초 만들기', term:'기초공사', dur:40.5,
+    lead:'무거운 건물이 가라앉지 않도록 땅속 받침을 만들어요.',
+    desc:'건물은 아주 무거워서 땅이 약하면 기울거나 가라앉아요. 그래서 긴 말뚝을 땅속 깊이 두드려 박아 단단한 땅까지 닿게 해요. 그 위에 철근을 그물처럼 엮고 콘크리트를 부으면 건물을 받쳐 줄 두꺼운 바닥판이 완성돼요.',
+    tip:'콘크리트는 누르는 힘에 강하고, 철근은 당기는 힘에 강해요. 둘을 함께 쓰면 서로의 약점을 채워 줘요.',
+    subs:[['말뚝 박기',0,.36],['철근 엮기',.36,.5],['콘크리트 붓기',.5,.78],['물 뿌리며 굳히기',.78,1]],
+    cam:{t:[0,-1.5,1],p:[-6,24,22]} },
+  { short:'골조공사(뼈대)', title:'뼈대 세우기', term:'골조공사(뼈대)', dur:84.0, cycle:true,
+    lead:'기둥과 바닥판으로 건물의 뼈대를 한 층씩 쌓아 올려요.',
+    desc:'① 철근으로 기둥과 바닥의 모양을 잡고 ② 나무 틀로 감싼 뒤 ③ 콘크리트를 붓고 ④ 단단하게 굳으면 틀을 떼어 내요. 이 과정을 한 층씩 반복해요. 타워크레인은 무거운 자재를 높은 곳으로 옮기고, 펌프카는 긴 팔로 콘크리트를 위층까지 보내요.',
+    tip:'콘크리트를 부어 모양을 만들기 위해 잠깐 세우는 나무 틀을 ‘거푸집’이라고 해요. 막 부은 콘크리트는 반짝이는 진회색이고, 굳을수록 밝은 회색으로 바뀌어요.',
+    subs:[['철근 세우기',0,.16],['나무 틀 두르기',.16,.36],['콘크리트 붓기',.36,.68],['굳히고 틀 떼기',.68,1]],
+    cam:{t:[0,3,0],p:[-25,14,27]} },
+  { short:'골조공사(외벽)', title:'겉옷 입히기', term:'골조공사(외벽)', dur:35.5,
+    lead:'뼈대 바깥에 벽을 쌓고 창문을 달아요.',
+    desc:'먼저 건물 둘레에 사람이 올라서서 일할 수 있는 발판을 세워요. 그 위에서 벽돌을 한 장 한 장 쌓아 바깥벽을 만들고, 창문을 끼워요. 지붕에는 비가 새지 않도록 물을 막는 층을 깔아요.',
+    tip:'높은 곳에서 일하려고 건물 바깥에 세우는 임시 발판을 ‘비계’라고 해요.',
+    subs:[['발판 세우기',0,.18],['벽돌 쌓기',.15,.58],['창문 달기',.58,.84],['지붕 방수',.84,1]],
+    cam:{t:[0,7,0],p:[28,13,32]} },
+  { short:'설비공사', title:'물·전기·공기 길 만들기', term:'설비공사', dur:32.7, toggle:'xray',
+    lead:'사람이 생활하려면 물, 전기, 깨끗한 공기가 필요해요.',
+    desc:'벽과 천장 속에 수도관, 전기선, 공기를 보내는 통로를 설치해요. 지붕에는 냉난방 기계를 올리고, 건물 가운데에는 엘리베이터를 달아요. 완성되면 대부분 벽과 천장 속에 숨어서 잘 보이지 않아요.',
+    tip:'사람 몸에 혈관과 신경이 있듯, 건물에도 물과 전기가 흐르는 길이 숨어 있어요.',
+    subs:[['수도관',0,.25],['전기선',.25,.5],['공기 통로·냉난방',.5,.75],['엘리베이터',.75,1]],
+    cam:{t:[0,7,0],p:[25,12,26]} },
+  { short:'실내 및 마감공사', title:'실내 꾸미기', term:'실내 및 마감공사', dur:32.7, toggle:'cut',
+    lead:'텅 빈 공간을 사람이 쓸 수 있는 방으로 만들어요.',
+    desc:'벽을 세워 방을 나누고, 바닥재를 깔아요. 천장을 붙여 관과 전선을 가리고 조명을 달아요. 마지막으로 책상과 의자 같은 가구를 들이면 사람이 지낼 수 있는 공간이 돼요.',
+    tip:'‘마감’은 눈에 보이는 겉면을 깔끔하게 마무리하는 일을 말해요.',
+    subs:[['벽 세워 방 나누기',0,.22],['바닥 깔기',.22,.42],['천장·조명 달기',.42,.62],['가구 들이기',.62,1]],
+    cam:{t:[0,6,1],p:[21,8,23]} },
+  { short:'준공(완성)', title:'완성! 건물 사용 시작', term:'준공(완성)', dur:30.0, toggle:'night',
+    lead:'공사 장비를 치우고 주변을 정리하면 드디어 완성이에요.',
+    desc:'타워크레인을 해체하고 울타리를 걷어 내요. 건물 앞에 보도를 깔고 나무를 심어요. 마지막으로 관청에서 설계도대로 안전하게 지어졌는지 검사하고, 통과하면 사람들이 건물을 사용할 수 있어요.',
+    tip:'공사가 모두 끝났는지 확인하는 마지막 검사를 ‘준공검사’라고 해요.',
+    subs:[['크레인 해체',0,.18],['울타리 치우기',.18,.32],['나무·보도 정리',.32,.62],['준공검사 통과',.62,1]],
+    cam:{t:[0,6,0],p:[-24,6.5,31]} },
+];
+
+const STAGE_TEXT = {
+  ko: STAGES.map(stage => ({short:stage.short, title:stage.title, term:stage.term,
+    lead:stage.lead, desc:stage.desc, tip:stage.tip, subs:stage.subs.map(sub => sub[0])})),
+  ru: [
+  {
+    "short": "Подготовка",
+    "title": "Готовим стройплощадку",
+    "term": "Подготовительные работы",
+    "lead": "Перед началом строительства приводим площадку в порядок и обеспечиваем безопасность.",
+    "desc": "Сначала ставим высокий забор вокруг стройплощадки, чтобы прохожие не пострадали. Устанавливаем временный офис и туалет для работников. Затем с помощью геодезического прибора измеряем участок и точно отмечаем место будущего здания.",
+    "tip": "Забор и временный офис нужны только на время строительства. После окончания работ их убирают. Такие сооружения называют временными.",
+    "subs": [
+      "Ставим забор",
+      "Устанавливаем временный офис",
+      "Размечаем место здания"
+    ]
+  },
+  {
+    "short": "Земляные работы",
+    "title": "Роем котлован",
+    "term": "Земляные работы",
+    "lead": "Вынимаем грунт там, где будет стоять здание.",
+    "desc": "При глубокой выемке грунт по краям может обрушиться. Поэтому сначала вбиваем стальные стойки и вставляем между ними деревянные доски, чтобы удержать землю. Затем экскаватор роет котлован, а самосвалы вывозят вынутый грунт.",
+    "tip": "Конструкцию, которая удерживает грунт и не даёт ему обрушиться в котлован, называют ограждением котлована.",
+    "subs": [
+      "Укрепляем стенки котлована",
+      "Загружаем первый самосвал",
+      "Загружаем второй самосвал",
+      "Убираем технику"
+    ]
+  },
+  {
+    "short": "Фундамент",
+    "title": "Делаем прочный фундамент",
+    "term": "Фундаментные работы",
+    "lead": "Создаём подземную опору, чтобы тяжёлое здание не проседало.",
+    "desc": "Здание очень тяжёлое. На слабом грунте оно может наклониться или просесть. Поэтому длинные сваи забивают глубоко в землю, до прочного слоя грунта. Сверху собирают сетку из арматуры и заливают бетон. Получается толстая плита, которая будет поддерживать здание.",
+    "tip": "Бетон хорошо выдерживает сжатие, а стальная арматура — растяжение. Вместе они компенсируют слабые стороны друг друга.",
+    "subs": [
+      "Забиваем сваи",
+      "Собираем арматурную сетку",
+      "Заливаем бетон",
+      "Увлажняем бетон при твердении"
+    ]
+  },
+  {
+    "short": "Каркас",
+    "title": "Возводим каркас",
+    "term": "Возведение каркаса",
+    "lead": "Шаг за шагом собираем каркас здания из колонн и перекрытий.",
+    "desc": "① Собираем арматуру колонн и перекрытия. ② Устанавливаем вокруг неё деревянные формы. ③ Заливаем бетон. ④ Когда бетон достаточно затвердеет, снимаем формы. Повторяем эти действия на каждом этаже. Башенный кран поднимает тяжёлые материалы, а бетононасос подаёт бетон наверх по длинной стреле.",
+    "tip": "Временную форму для заливки бетона называют опалубкой. Свежий бетон блестящий и тёмно-серый; по мере твердения он становится светло-серым.",
+    "subs": [
+      "Устанавливаем арматуру",
+      "Монтируем деревянную опалубку",
+      "Заливаем бетон",
+      "Даём затвердеть и снимаем форму"
+    ]
+  },
+  {
+    "short": "Наружные стены",
+    "title": "Строим наружные стены",
+    "term": "Наружные стены",
+    "lead": "Возводим стены вокруг каркаса и устанавливаем окна.",
+    "desc": "Сначала вокруг здания устанавливаем площадки, на которых могут стоять и работать строители. С них укладываем кирпич за кирпичом и возводим наружные стены, затем устанавливаем окна. На крыше укладываем водонепроницаемый слой, чтобы внутрь не попадал дождь.",
+    "tip": "Временные конструкции с площадками для работы на высоте снаружи здания называют строительными лесами.",
+    "subs": [
+      "Устанавливаем строительные леса",
+      "Кладём кирпич",
+      "Устанавливаем окна",
+      "Делаем гидроизоляцию крыши"
+    ]
+  },
+  {
+    "short": "Коммуникации",
+    "title": "Проводим воду, свет и воздух",
+    "term": "Инженерные системы",
+    "lead": "Для жизни в здании нужны вода, электричество и чистый воздух.",
+    "desc": "Внутри стен и над потолками прокладываем водопроводные трубы, электрические провода и воздуховоды. На крыше устанавливаем оборудование для отопления и охлаждения, а в центральной части здания — лифт. После отделки большая часть этих систем будет скрыта за стенами и потолками.",
+    "tip": "Как в теле человека есть сосуды и нервы, так и в здании скрыты пути, по которым поступают вода и электричество.",
+    "subs": [
+      "Прокладываем водопровод",
+      "Прокладываем электропроводку",
+      "Монтируем вентиляцию и климатическое оборудование",
+      "Устанавливаем лифт"
+    ]
+  },
+  {
+    "short": "Отделка",
+    "title": "Обустраиваем помещения",
+    "term": "Внутренняя отделка",
+    "lead": "Превращаем пустое пространство в помещения, которыми можно пользоваться.",
+    "desc": "Ставим перегородки, чтобы разделить пространство на комнаты, и укладываем напольное покрытие. Монтируем потолки, закрывающие трубы и провода, и устанавливаем светильники. Затем расставляем столы, стулья и другую мебель — теперь здесь можно находиться и работать.",
+    "tip": "Отделкой называют работы, которые придают видимым поверхностям аккуратный, законченный вид.",
+    "subs": [
+      "Делим пространство перегородками",
+      "Укладываем напольное покрытие",
+      "Монтируем потолки и светильники",
+      "Расставляем мебель"
+    ]
+  },
+  {
+    "short": "Завершение",
+    "title": "Готово! Здание можно использовать",
+    "term": "Завершение строительства",
+    "lead": "Убираем строительную технику и благоустраиваем территорию — строительство завершено!",
+    "desc": "Демонтируем башенный кран и убираем забор. Перед зданием укладываем тротуар и сажаем деревья. В конце уполномоченные органы проверяют, соответствует ли здание проекту и безопасно ли оно. После успешной проверки зданием можно пользоваться.",
+    "tip": "Заключительную проверку после окончания строительства называют итоговой приёмкой.",
+    "subs": [
+      "Демонтируем кран",
+      "Убираем забор",
+      "Сажаем деревья и укладываем тротуар",
+      "Проходим итоговую проверку"
+    ]
+  }
+]
+};
+function translateStages() {
+  STAGE_TEXT[I18N.language].forEach((text, index) => {
+    const stage = STAGES[index];
+    for (const key of ['short','title','term','lead','desc','tip']) stage[key] = text[key];
+    stage.subs.forEach((sub, subIndex) => { sub[0] = text.subs[subIndex]; });
+  });
+}
+translateStages();
+
+const INTRO_CAM = {t:[0,6,0],p:[-26,8,30]};
+
+/* =========================================================
+   유틸
+   ========================================================= */
+const $ = id => document.getElementById(id);
+const clamp = (v,a=0,b=1) => Math.min(b,Math.max(a,v));
+const lerp = (a,b,t) => a+(b-a)*t;
+const ease = t => t<.5 ? 2*t*t : 1-Math.pow(-2*t+2,2)/2;
+const easeOut = t => 1-Math.pow(1-t,3);
+const backOut = t => { const c1=1.5, c3=c1+1; return 1+c3*Math.pow(t-1,3)+c1*Math.pow(t-1,2); };
+const seg = (T,a,b) => clamp((T-a)/(b-a));
+const inWin = (T,a,b) => T>=a && T<b;
+const V = (x,y,z) => new THREE.Vector3(x,y,z);
+const rand = (()=>{ let s=7; return ()=>{ s=(s*16807)%2147483647; return (s-1)/2147483646; }; })();
+
+/* =========================================================
+   렌더러 · 장면
+   ========================================================= */
+const renderer = new THREE.WebGLRenderer({ antialias:true, powerPreference:'high-performance' });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+$('stage').appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.fog = new THREE.Fog(0xe9eef2, 90, 260);
+
+const camera = new THREE.PerspectiveCamera(38, innerWidth/innerHeight, 0.5, 700);
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true; controls.dampingFactor = .08;
+controls.enablePan = false;
+controls.minDistance = 10; controls.maxDistance = 95;
+controls.maxPolarAngle = 1.48;
+controls.rotateSpeed = .7;
+
+// 빛
+const hemi = new THREE.HemisphereLight(0xe3efff, 0xa89c8a, 0.95);
+scene.add(hemi);
+const sun = new THREE.DirectionalLight(0xfff0dc, 2.7);
+sun.position.set(-32,48,28);
+sun.castShadow = true;
+sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-42,right:42,top:42,bottom:-42,near:1,far:160});
+sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.03;
+scene.add(sun);
+
+// 하늘 (그라데이션 캔버스)
+const skyCv = document.createElement('canvas'); skyCv.width = 2; skyCv.height = 256;
+const skyTex = new THREE.CanvasTexture(skyCv); skyTex.colorSpace = THREE.SRGBColorSpace;
+scene.background = skyTex;
+const cA=new THREE.Color(), cB=new THREE.Color(), cC=new THREE.Color();
+function paintSky(k){
+  const g = skyCv.getContext('2d');
+  const top = cA.set('#8dbbe4').lerp(new THREE.Color('#0a1534'),k).getStyle();
+  const mid = cB.set('#cfe1ef').lerp(new THREE.Color('#283c6e'),k).getStyle();
+  const bot = cC.set('#eef1f3').lerp(new THREE.Color('#57638a'),k);
+  const grd = g.createLinearGradient(0,0,0,256);
+  grd.addColorStop(0,top); grd.addColorStop(.55,mid); grd.addColorStop(1,bot.getStyle());
+  g.fillStyle = grd; g.fillRect(0,0,2,256);
+  skyTex.needsUpdate = true;
+  scene.fog.color.copy(bot);
+}
+paintSky(0);
+
+/* =========================================================
+   텍스처 (캔버스로 직접 그림)
+   ========================================================= */
+function canvasTex(w,h,draw,repeat=[1,1]){
+  const c=document.createElement('canvas'); c.width=w; c.height=h;
+  draw(c.getContext('2d'),w,h);
+  const t=new THREE.CanvasTexture(c);
+  t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(...repeat);
+  t.colorSpace=THREE.SRGBColorSpace; t.anisotropy=renderer.capabilities.getMaxAnisotropy?Math.min(8,renderer.capabilities.getMaxAnisotropy()):4;
+  return t;
+}
+function noise(g,w,h,base,amp,n=6000){
+  g.fillStyle=base; g.fillRect(0,0,w,h);
+  for(let i=0;i<n;i++){ const v=(rand()-.5)*amp; g.fillStyle=v>0?`rgba(255,255,255,${v})`:`rgba(0,0,0,${-v})`; g.fillRect(rand()*w,rand()*h,2,2); }
+}
+function paintFence(g,w,h){
+  g.clearRect(0,0,w,h); g.fillStyle='#f4f5f2'; g.fillRect(0,0,w,h);
+  g.fillStyle='#1f5fae'; g.fillRect(0,h*.72,w,h*.28);
+  g.fillStyle='#2f9a59'; g.fillRect(0,h*.66,w,h*.05);
+  g.fillStyle='#2f9a59'; g.textAlign='center';
+  if(I18N.language==='ru'){
+    g.font='900 19px Arial,sans-serif';
+    t('fenceSign').split('|').forEach((line,index)=>g.fillText(line,w/2,34+index*26,w-16));
+  } else { g.font='900 30px sans-serif'; g.fillText(t('fenceSign'),w/2,h*.48); }
+  g.strokeStyle='rgba(0,0,0,.12)'; g.lineWidth=3; g.strokeRect(1,1,w-2,h-2);
+}
+function paintOfficeSign(g,w,h){
+  g.clearRect(0,0,w,h); g.fillStyle='#ffffff'; g.fillRect(0,0,w,h);
+  g.fillStyle='#1f5fae'; g.font=I18N.language==='ru'?'800 27px Arial,sans-serif':'800 34px sans-serif';
+  g.textAlign='center'; g.fillText(t('officeSign'),w/2,44,w-16);
+}
+function translateTextures(){
+  for(const [name,paint] of [['fence',paintFence],['sign',paintOfficeSign]]){
+    const texture=tex[name], canvas=texture.image;
+    paint(canvas.getContext('2d'),canvas.width,canvas.height); texture.needsUpdate=true;
+  }
+}
+
+const tex = {
+  brick: canvasTex(512,512,(g,w,h)=>{
+    g.fillStyle='#ece3da'; g.fillRect(0,0,w,h);
+    const bw=64,bh=32;
+    for(let r=0;r<16;r++){ const off=(r%2)*bw/2;
+      for(let x=-bw;x<w+bw;x+=bw){ const v=rand();
+        g.fillStyle=`rgb(${(212+v*22-11)|0},${(152+v*20-10)|0},${(128+v*18-9)|0})`;
+        g.fillRect(x+off+2,r*bh+2,bw-4,bh-4);
+        g.fillStyle='rgba(255,255,255,.06)'; g.fillRect(x+off+2,r*bh+2,bw-4,4);
+      }}
+  }),
+  lattice: canvasTex(128,128,(g,w,h)=>{
+    g.clearRect(0,0,w,h); g.strokeStyle='#f2b416'; g.lineWidth=12; g.strokeRect(6,6,w-12,h-12);
+    g.lineWidth=7; g.beginPath(); g.moveTo(6,6); g.lineTo(w-6,h-6); g.stroke();
+  }),
+  fence: canvasTex(256,128,paintFence),
+  planks: canvasTex(256,256,(g,w,h)=>{
+    for(let i=0;i<8;i++){ const v=rand(); g.fillStyle=`rgb(${(150+v*30)|0},${(112+v*24)|0},${(72+v*18)|0})`; g.fillRect(0,i*32,w,30); g.fillStyle='rgba(0,0,0,.35)'; g.fillRect(0,i*32+30,w,2);}
+  },[6,1]),
+  dirt: canvasTex(256,256,(g,w,h)=>noise(g,w,h,'#8d6c4c',.22,9000),[6,6]),
+  dirtDark: canvasTex(256,256,(g,w,h)=>noise(g,w,h,'#6f5239',.25,9000),[4,4]),
+  paving: canvasTex(256,256,(g,w,h)=>{
+    noise(g,w,h,'#d3d1cb',.06,3000);
+    g.strokeStyle='rgba(120,118,112,.35)'; g.lineWidth=2;
+    for(let i=0;i<=4;i++){ g.beginPath(); g.moveTo(0,i*64); g.lineTo(w,i*64); g.stroke(); g.beginPath(); g.moveTo(i*64,0); g.lineTo(i*64,h); g.stroke(); }
+  },[60,60]),
+  plaza: canvasTex(256,256,(g,w,h)=>{
+    noise(g,w,h,'#e3ddd2',.05,2500);
+    g.strokeStyle='rgba(140,130,118,.35)'; g.lineWidth=2;
+    for(let i=0;i<=8;i++){ g.beginPath(); g.moveTo(0,i*32); g.lineTo(w,i*32); g.stroke(); }
+    for(let r=0;r<8;r++) for(let i=0;i<=4;i++){ const x=i*64+(r%2)*32; g.beginPath(); g.moveTo(x,r*32); g.lineTo(x,r*32+32); g.stroke(); }
+  },[1/4,1/4]),
+  asphalt: canvasTex(512,64,(g,w,h)=>{
+    noise(g,w,h,'#6a6b6d',.12,4000);
+    g.fillStyle='#f3f3f0'; for(let x=0;x<w;x+=128) g.fillRect(x+20,h/2-2,70,4);
+  },[40,1]),
+  flowBlue: canvasTex(16,64,(g,w,h)=>{ g.fillStyle='#2f8de4'; g.fillRect(0,0,w,h); g.fillStyle='#9fd0ff'; g.fillRect(0,0,w,14); },[1,1]),
+  flowYellow: canvasTex(16,64,(g,w,h)=>{ g.fillStyle='#f6c315'; g.fillRect(0,0,w,h); g.fillStyle='#fff6c4'; g.fillRect(0,0,w,10); },[1,1]),
+  drum: canvasTex(64,64,(g,w,h)=>{ g.fillStyle='#e9e9e4'; g.fillRect(0,0,w,h); g.fillStyle='#e8692a'; g.fillRect(0,0,w/2,h); }),
+  sign: canvasTex(256,64,paintOfficeSign),
+};
+tex.plaza.wrapS = tex.plaza.wrapT = THREE.RepeatWrapping;
+
+/* =========================================================
+   재질
+   ========================================================= */
+const M = (color,o={}) => new THREE.MeshStandardMaterial(Object.assign({color,roughness:.85,metalness:0,envMapIntensity:.45},o));
+const mat = {
+  concrete: M(0xdedbd3,{roughness:.92}),
+  neighbor: M(0xf0ede7,{roughness:.95}),
+  steel: M(0x7d8892,{metalness:.55,roughness:.45}),
+  steelLight: M(0xc5ccd2,{metalness:.5,roughness:.35}),
+  dark: M(0x2c3036,{roughness:.6}),
+  tire: M(0x1d1f22,{roughness:.9}),
+  yellow: M(0xf2b51c,{roughness:.45}),
+  yellowDark: M(0xc98f10,{roughness:.5}),
+  orange: M(0xe8692a,{roughness:.55}),
+  white: M(0xf3f2ee,{roughness:.7}),
+  red: M(0xd63a2f,{roughness:.6}),
+  stake: M(0xff7a1a),
+  string: M(0xff3355,{emissive:0x661122}),
+  chalk: M(0xffffff,{roughness:1}),
+  rebar: M(0x7a4428,{metalness:.45,roughness:.55}),
+  wood: M(0xc99a5f,{roughness:.8}),
+  dirt: M(0xffffff,{map:tex.dirt,roughness:1}),
+  dirtDark: M(0xffffff,{map:tex.dirtDark,roughness:1}),
+  planks: M(0xffffff,{map:tex.planks,roughness:.9}),
+  paving: M(0xffffff,{map:tex.paving,roughness:.95}),
+  plaza: M(0xffffff,{map:tex.plaza,roughness:.9,transparent:true,opacity:0}),
+  asphalt: M(0xffffff,{map:tex.asphalt,roughness:.95}),
+  curb: M(0xbdbab3),
+  fence: M(0xffffff,{map:tex.fence,roughness:.7}),
+  container: M(0x3d6ea6,{roughness:.6,metalness:.2}),
+  sign: M(0xffffff,{map:tex.sign}),
+  lattice: M(0xffffff,{map:tex.lattice,alphaTest:.5,side:THREE.DoubleSide,roughness:.5,metalness:.2}),
+  latticeJib: M(0xffffff,{map:tex.lattice.clone(),alphaTest:.5,side:THREE.DoubleSide,roughness:.5,metalness:.2}),
+  counterweight: M(0x9b9a95),
+  brick: M(0xffffff,{map:tex.brick,roughness:.9,transparent:true,opacity:1}),
+  cap: M(0xf2efe9,{transparent:true,opacity:1}),
+  frame: M(0x3a3d42,{roughness:.5,metalness:.4,transparent:true,opacity:1}),
+  glass: new THREE.MeshPhysicalMaterial({color:0x9bb6c0,metalness:.1,roughness:.06,transparent:true,opacity:.55,envMapIntensity:1.3,emissive:0xffc77a,emissiveIntensity:0}),
+  membrane: M(0x5d6266,{roughness:.8}),
+  water: M(0xffffff,{map:tex.flowBlue,roughness:.4,emissive:0x0b3a6e,emissiveIntensity:.3}),
+  elec: M(0xffffff,{map:tex.flowYellow,roughness:.4,emissive:0x6b5000,emissiveIntensity:.5}),
+  duct: M(0xa9b2bb,{metalness:.6,roughness:.35}),
+  drum: M(0xffffff,{map:tex.drum,roughness:.5}),
+  partition: M(0xf6f4f0,{roughness:.9}),
+  floorWood: M(0xb98c5f,{roughness:.6}),
+  floorStone: M(0xd9d3c8,{roughness:.5}),
+  ceiling: M(0xf7f7f5,{roughness:.95}),
+  lightPanel: M(0xffffff,{emissive:0xfff2d6,emissiveIntensity:0}),
+  deskTop: M(0xe8dccb,{roughness:.6}),
+  chair: M(0x3b4250,{roughness:.7}),
+  leaf: M(0x9ccc7a,{roughness:.85}),
+  leafDark: M(0x6fa85a,{roughness:.85}),
+  trunk: M(0x7a5a3c),
+  pot: M(0xe2ddd4,{roughness:.9}),
+  skin: M(0xf0c9a5),
+  lampHead: M(0xffffff,{emissive:0xffe2a8,emissiveIntensity:0}),
+  pile: M(0xc9c6bf,{roughness:.85}),
+  found: M(0xdedbd3,{roughness:.92}),
+};
+mat.latticeJib.map.repeat.set(1,1);
+
+/* =========================================================
+   만들기 도우미
+   ========================================================= */
+function mesh(geo,m,parent=scene,{cast=true,recv=true}={}){ const o=new THREE.Mesh(geo,m); o.castShadow=cast; o.receiveShadow=recv; parent.add(o); return o; }
+function boxB(w,h,d){ return new THREE.BoxGeometry(w,h,d).translate(0,h/2,0); }
+function brickGeo(w,h,d,bottom=true){
+  const g=new THREE.BoxGeometry(w,h,d); const uv=g.attributes.uv;
+  const s=[[d,h],[d,h],[w,d],[w,d],[w,h],[w,h]];
+  for(let i=0;i<uv.count;i++){ const f=Math.floor(i/4); uv.setXY(i, uv.getX(i)*s[f][0]/2.4, uv.getY(i)*s[f][1]/1.2); }
+  if(bottom) g.translate(0,h/2,0); return g;
+}
+function unitCyl(r,seg=10){ return new THREE.CylinderGeometry(r,r,1,seg).translate(0,.5,0); }
+const Y = V(0,1,0);
+function link(geo,m,a,b,parent=scene,opt){ // geo: 0..1 along +Y
+  const o=mesh(geo,m,parent,opt); const d=new THREE.Vector3().subVectors(b,a); const L=d.length();
+  o.position.copy(a); o.quaternion.setFromUnitVectors(Y,d.normalize()); o.userData.L=L; o.scale.set(1,L,1); return o;
+}
+function grow(o,k){ o.visible=k>0.001; if(o.visible) o.scale.y=o.userData.L*k; }
+function pop(o,k,base=1){ o.visible=k>0.001; if(o.visible) o.scale.setScalar(base*backOut(k)); }
+function show(o,v){ o.visible=v; }
+function pipeGeo(r,L,seg=10){ const g=new THREE.CylinderGeometry(r,r,1,seg).translate(0,.5,0); const uv=g.attributes.uv; for(let i=0;i<uv.count;i++) uv.setY(i,uv.getY(i)*L*1.5); return g; }
+function keyInterp(keys,vals,p){ for(let i=0;i<keys.length-1;i++){ if(p<=keys[i+1]){ const t=(p-keys[i])/(keys[i+1]-keys[i]); return lerp(vals[i],vals[i+1],ease(clamp(t))); } } return vals[vals.length-1]; }
+function wheel(r,w,parent,x,y,z){ const g=new THREE.CylinderGeometry(r,r,w,16); g.rotateX(Math.PI/2); const o=mesh(g,mat.tire,parent); o.position.set(x,y,z); return o; }
+
+/* =========================================================
+   상수 (건물 치수)
+   ========================================================= */
+const LT = [4.2, 7.8, 11.4, 15.0];     // 각 층 위 슬래브 윗면 높이
+const BASE = [0.02, 4.2, 7.8, 11.4];   // 각 층 바닥 높이
+const SLAB = 0.35;
+const GX = [-7.5,-2.5,2.5,7.5];
+const PIT_DEPTH = 2.0;
+const P = 8.3;
+
+/* =========================================================
+   땅 · 도로 · 이웃 건물
+   ========================================================= */
+const outerShape = new THREE.Shape();
+outerShape.moveTo(-250,-250); outerShape.lineTo(250,-250); outerShape.lineTo(250,250); outerShape.lineTo(-250,250); outerShape.closePath();
+{ const h=new THREE.Path(); h.moveTo(-P,-P); h.lineTo(-P,P); h.lineTo(P,P); h.lineTo(P,-P); h.closePath(); outerShape.holes.push(h); }
+const outerGeo = new THREE.ShapeGeometry(outerShape).rotateX(-Math.PI/2);
+{ const uv=outerGeo.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)/4,uv.getY(i)/4); }
+tex.paving.repeat.set(1,1);
+const groundOuter = mesh(outerGeo, mat.paving, scene, {cast:false});
+groundOuter.position.y = -0.03;
+const road = mesh(new THREE.PlaneGeometry(500,7).rotateX(-Math.PI/2), mat.asphalt, scene, {cast:false});
+road.position.set(0,-0.01,17.5); tex.asphalt.repeat.set(100,1);
+mesh(boxB(500,.18,.35), mat.curb, scene).position.set(0,-0.03,13.85);
+mesh(boxB(500,.18,.35), mat.curb, scene).position.set(0,-0.03,21.15);
+
+// 공사장 흙 (가운데 구덩이 자리 구멍)
+const SITE = {x0:-13,x1:14,z0:-11,z1:11};
+const siteShape = new THREE.Shape();
+siteShape.moveTo(SITE.x0,-SITE.z1); siteShape.lineTo(SITE.x1,-SITE.z1); siteShape.lineTo(SITE.x1,-SITE.z0); siteShape.lineTo(SITE.x0,-SITE.z0); siteShape.closePath();
+const hole = new THREE.Path(); hole.moveTo(-P,-P); hole.lineTo(-P,P); hole.lineTo(P,P); hole.lineTo(P,-P); hole.closePath();
+siteShape.holes.push(hole);
+const siteGeo = new THREE.ShapeGeometry(siteShape).rotateX(-Math.PI/2);
+{ const uv=siteGeo.attributes.uv; for(let i=0;i<uv.count;i++) uv.setXY(i,uv.getX(i)/6,uv.getY(i)/6); }
+tex.dirt.repeat.set(1,1);
+const siteDirt = mesh(siteGeo, mat.dirt, scene, {cast:false}); siteDirt.position.y = 0.0;
+const sitePlaza = mesh(siteGeo.clone(), mat.plaza, scene, {cast:false}); sitePlaza.position.y = 0.012;
+
+// 구덩이
+const pitFloor = mesh(new THREE.PlaneGeometry(2*P,2*P).rotateX(-Math.PI/2), mat.dirtDark, scene, {cast:false});
+const pitWalls = [];
+[[0,-P,0],[0,P,Math.PI],[-P,0,Math.PI/2],[P,0,-Math.PI/2]].forEach(([x,z,r])=>{
+  const g = new THREE.PlaneGeometry(2*P,1).translate(0,-.5,0);
+  const w = mesh(g, mat.planks, scene, {cast:false}); w.position.set(x,0,z); w.rotation.y=r; pitWalls.push(w);
+});
+// 흙막이 철 기둥
+const shoring = [];
+for(let s=0;s<4;s++) for(let i=0;i<9;i++){
+  const a = -P + i*(2*P/8);
+  const [x,z] = [[a,-P-.12],[a,P+.12],[-P-.12,a],[P+.12,a]][s];
+  const o = mesh(boxB(.3,2.85,.3), mat.steel, scene); o.position.set(x,-2.6,z); o.userData.x=x; o.userData.z=z;
+  shoring.push(o);
+}
+
+// 이웃 건물
+[[-27,0,-1,20,19,24],[28,0,-1,18,14,24],[0,0,-34,40,22,12],[-8,0,-52,30,30,14]].forEach(([x,y,z,w,h,d])=>{
+  const o=mesh(boxB(w,h,d),mat.neighbor,scene); o.position.set(x,y,z);
+  const r=mesh(boxB(w-1,.6,d-1),mat.white,scene,{cast:false}); r.position.set(x,h,z);
+});
+
+/* =========================================================
+   1단계: 울타리 · 사무소 · 측량
+   ========================================================= */
+const fencePanels = [];
+function fenceRun(x1,z1,x2,z2){
+  const L=Math.hypot(x2-x1,z2-z1), n=Math.ceil(L/2.4), ang=Math.atan2(z2-z1,x2-x1);
+  for(let i=0;i<n;i++){
+    const t=(i+.5)/n; const p=mesh(boxB(L/n-.04,2.2,.08),mat.fence,scene);
+    p.position.set(lerp(x1,x2,t),0,lerp(z1,z2,t)); p.rotation.y=-ang; fencePanels.push(p);
+  }
+}
+fenceRun(SITE.x0,SITE.z1,-8,SITE.z1);
+fenceRun(SITE.x0,SITE.z0,SITE.x0,SITE.z1);
+fenceRun(SITE.x1,SITE.z0,SITE.x0,SITE.z0);
+fenceRun(SITE.x1,SITE.z1,SITE.x1,SITE.z0);
+fenceRun(5,SITE.z1,SITE.x1,SITE.z1);
+
+const office = new THREE.Group(); office.position.set(-9.6,0,-8.4); office.rotation.y=Math.PI/2; scene.add(office);
+mesh(boxB(6,2.6,2.4),mat.container,office);
+for(let i=0;i<2;i++){ const w=mesh(new THREE.BoxGeometry(1.2,.8,.06),mat.glass,office,{cast:false}); w.position.set(-1.6+i*2.6,1.6,1.22); }
+mesh(new THREE.BoxGeometry(.9,2,.06),mat.white,office).position.set(.6,1,1.22);
+mesh(new THREE.PlaneGeometry(2.4,.6),mat.sign,office,{cast:false}).position.set(-.3,2.95,1.205);
+mesh(boxB(2.4,.6,.06),mat.white,office,{cast:false}).position.set(-.3,2.65,1.17);
+const toilet = mesh(boxB(1.2,2.3,1.2),M(0x2f78c7),scene); toilet.position.set(-5.8,0,-9.7);
+
+const stakes=[], strings=[], chalks=[];
+const SP = 8.25;
+[[-SP,-SP],[SP,-SP],[SP,SP],[-SP,SP]].forEach(([x,z])=>{ const s=mesh(boxB(.1,.9,.1),mat.stake,scene); s.position.set(x,0,z); stakes.push(s); });
+for(let i=0;i<4;i++){
+  const a=stakes[i].position, b=stakes[(i+1)%4].position;
+  strings.push(link(unitCyl(.025,5),mat.string,V(a.x,.6,a.z),V(b.x,.6,b.z),scene,{cast:false}));
+  const ch = link(new THREE.BoxGeometry(.12,1,.01).translate(0,.5,0), mat.chalk, V(a.x,.012,a.z), V(b.x,.012,b.z), scene, {cast:false,recv:true});
+  ch.rotation.x += 0; chalks.push(ch);
+}
+// 측량기
+const tripod = new THREE.Group(); tripod.position.set(10.2,0,9.2); scene.add(tripod);
+for(let i=0;i<3;i++){ const a=i*Math.PI*2/3; link(unitCyl(.03,6),mat.yellowDark,V(Math.cos(a)*.5,0,Math.sin(a)*.5),V(0,1.45,0),tripod); }
+mesh(new THREE.BoxGeometry(.3,.35,.25),mat.yellow,tripod).position.set(0,1.62,0);
+mesh(new THREE.CylinderGeometry(.06,.06,.4,10).rotateX(Math.PI/2),mat.dark,tripod).position.set(0,1.7,-.2);
+
+/* =========================================================
+   사람 (작업자 · 시민)
+   ========================================================= */
+function makePerson({vest=0xff7a1a,pants=0x2c3e66,helmet=0xffd21f,hat=true,shirt=null}={}){
+  const g=new THREE.Group();
+  const legM=M(pants), vestM=M(vest);
+  const mkLimb=(w,h,d,m,x,y)=>{ const p=new THREE.Group(); p.position.set(x,y,0); g.add(p); const o=mesh(new THREE.BoxGeometry(w,h,d).translate(0,-h/2,0),m,p,{cast:true}); return p; };
+  const legL=mkLimb(.17,.9,.2,legM,-.11,.92), legR=mkLimb(.17,.9,.2,legM,.11,.92);
+  mesh(new THREE.BoxGeometry(.48,.62,.28),vestM,g).position.y=1.22;
+  const armM = shirt?M(shirt):vestM;
+  const armL=mkLimb(.12,.6,.14,armM,-.31,1.5), armR=mkLimb(.12,.6,.14,armM,.31,1.5);
+  mesh(new THREE.SphereGeometry(.14,14,10),mat.skin,g).position.y=1.68;
+  if(hat){ const hm=M(helmet,{roughness:.35}); const h=mesh(new THREE.SphereGeometry(.17,14,8,0,Math.PI*2,0,Math.PI/2),hm,g); h.position.y=1.72;
+    mesh(new THREE.CylinderGeometry(.21,.21,.03,16),hm,g).position.y=1.72; }
+  else { mesh(new THREE.SphereGeometry(.145,12,8,0,Math.PI*2,0,Math.PI/2.2),M(0x2a2420),g).position.y=1.71; }
+  g.scale.setScalar(1.05); scene.add(g);
+  return {g,legL,legR,armL,armR};
+}
+function walkAnim(p,time,moving,speed=8){ const s=moving?Math.sin(time*speed)*.55:0; p.legL.rotation.x=s; p.legR.rotation.x=-s; p.armL.rotation.x=-s*.8; p.armR.rotation.x=s*.8; }
+function pathPos(pts,dist){
+  let total=0; const segs=[]; for(let i=0;i<pts.length;i++){ const a=pts[i],b=pts[(i+1)%pts.length]; const L=Math.hypot(b[0]-a[0],b[1]-a[1]); segs.push([a,b,L]); total+=L; }
+  let d=((dist%total)+total)%total;
+  for(const [a,b,L] of segs){ if(d<=L){ const t=d/L; return {x:lerp(a[0],b[0],t),z:lerp(a[1],b[1],t),h:Math.atan2(b[0]-a[0],b[1]-a[1])}; } d-=L; }
+  return {x:pts[0][0],z:pts[0][1],h:0};
+}
+const workers = [
+  {p:makePerson(),            path:[[10.6,-8],[10.6,7],[11.8,7],[11.8,-8]], sp:1.2, off:0},
+  {p:makePerson({vest:0xc6e63a}), path:[[-11,8],[-11,-5],[-7,-5],[-11,8]], sp:1.1, off:3},
+  {p:makePerson({helmet:0xffffff,vest:0x3b6fb6}), path:[[-6,-10],[4,-10]], sp:.9, off:5},
+  {p:makePerson({vest:0xff7a1a}), path:[[-5,-4],[5,-4],[5,4],[-5,4]], sp:1, off:1, top:true},
+  {p:makePerson({vest:0xc6e63a,helmet:0xff6a2a}), path:[[4,5],[-4,5],[-4,-5],[4,-5]], sp:.9, off:7, top:true},
+];
+const civilians = [
+  {p:makePerson({hat:false,vest:0x6d4b8f,pants:0x24262b}), path:[[-30,12.4],[30,12.4]], sp:1.2, off:0},
+  {p:makePerson({hat:false,vest:0xd9583b,pants:0x384b6b}), path:[[25,12.9],[-25,12.9]], sp:1.0, off:14},
+  {p:makePerson({hat:false,vest:0xf1f1ec,pants:0x5a4636}), path:[[-20,12.6],[20,12.6]], sp:.8, off:30},
+];
+
+/* =========================================================
+   2단계: 굴착기 · 덤프트럭
+   ========================================================= */
+function makeExcavator(){
+  const g=new THREE.Group(); scene.add(g);
+  for(const x of [-1.2,1.2]){ const t=mesh(boxB(.85,.85,4.2),mat.dark,g); t.position.x=x; }
+  const upper=new THREE.Group(); upper.position.y=.9; g.add(upper);
+  mesh(boxB(2.7,1.15,3.1),mat.yellow,upper).position.set(0,0,.35);
+  mesh(boxB(2.7,.95,.7),mat.yellowDark,upper).position.set(0,.05,1.85);
+  const cab=mesh(boxB(1.1,1.35,1.4),mat.glass,upper); cab.position.set(-.75,1.15,-.55);
+  mesh(boxB(1.16,.08,1.46),mat.yellow,upper).position.set(-.75,2.5,-.55);
+  const boomP=new THREE.Group(); boomP.position.set(.45,1.25,-1.0); upper.add(boomP);
+  mesh(new THREE.BoxGeometry(.5,.55,4.4).translate(0,0,-2.2),mat.yellow,boomP);
+  const armP=new THREE.Group(); armP.position.set(0,0,-4.4); boomP.add(armP);
+  mesh(new THREE.BoxGeometry(.38,.45,3.1).translate(0,0,-1.55),mat.yellow,armP);
+  const bucketP=new THREE.Group(); bucketP.position.set(0,0,-3.1); armP.add(bucketP);
+  mesh(new THREE.BoxGeometry(1.1,.75,.85).translate(0,-.3,-.35),mat.dark,bucketP);
+  const dirt=mesh(new THREE.SphereGeometry(.5,10,8).scale(1,.55,.8),mat.dirt,bucketP); dirt.position.set(0,.05,-.35);
+  return {g,upper,boomP,armP,bucketP,dirt};
+}
+const exc = makeExcavator();
+const EXC_POS = V(3.5,0,10.6);
+const TRUCK_PARK = V(10.2,0,15.4);
+const EXC_TRUCK_YAW = Math.atan2(-(TRUCK_PARK.x-EXC_POS.x), -(TRUCK_PARK.z-EXC_POS.z));
+
+function makeDumpTruck(){
+  const g=new THREE.Group(); scene.add(g);
+  mesh(boxB(6.6,.5,2.2),mat.dark,g).position.y=.75;
+  const cab=mesh(boxB(1.8,1.9,2.3),mat.orange,g); cab.position.set(2.5,1.0,0);
+  mesh(new THREE.BoxGeometry(.05,.8,2.0),mat.glass,g,{cast:false}).position.set(3.42,2.35,0);
+  const bed=new THREE.Group(); bed.position.set(-.9,1.3,0); g.add(bed);
+  mesh(boxB(4.4,.12,2.3),mat.steel,bed);
+  for(const z of [-1.1,1.1]) mesh(boxB(4.4,1.2,.1),mat.steel,bed).position.z=z;
+  mesh(boxB(.1,1.2,2.3),mat.steel,bed).position.x=-2.2; mesh(boxB(.1,1.3,2.3),mat.steel,bed).position.x=2.2;
+  const load=mesh(new THREE.SphereGeometry(1,14,10).scale(2,.75,1),mat.dirt,bed); load.position.y=.6;
+  const wheels=[]; for(const x of [2.6,-1.4,-2.6]) for(const z of [-1.05,1.05]) wheels.push(wheel(.55,.45,g,x,.55,z));
+  return {g,load,wheels};
+}
+const dump = makeDumpTruck();
+const fallDirt = new THREE.Group(); scene.add(fallDirt);
+for(let i=0;i<6;i++){ const c=mesh(new THREE.IcosahedronGeometry(.22+rand()*.12,0),mat.dirt,fallDirt); c.position.set((rand()-.5)*.7,(rand()-.5)*.4,(rand()-.5)*.6); }
+// 땅 파기 타임라인 (초 단위): 트럭 도착 → 3번 퍼 담기 → 트럭 출발, 트럭 2대
+const DIG = {start:1.17, end:1.93, tin:3.6, seg:4.5, tout:3.3};
+DIG.cyc = DIG.tin + 3*DIG.seg + DIG.tout;
+function digTimeline(tau){
+  const curl = pp => clamp((pp-.42)/.13);
+  const out = {p:.1, truckX:null, load:0, moving:false, fall:-1, digs:0, parked:false, dumps:0};
+  if(tau<0){ return out; }
+  if(tau>=2*DIG.cyc){ out.p=0; out.digs=6; out.dumps=6; return out; }
+  const c = Math.floor(tau/DIG.cyc), t = tau - c*DIG.cyc;
+  let digs = c===0?0:4, dumps = c*3;
+  if(t<DIG.tin){
+    const k=t/DIG.tin; out.truckX=lerp(-42,TRUCK_PARK.x,easeOut(k)); out.moving=true;
+    if(c===0){ out.p=lerp(.1,.68,ease(clamp(t/(DIG.tin*.9)))); digs+=curl(out.p); } else out.p=.68;
+  } else {
+    if(c===0) digs+=1;
+    const t2=t-DIG.tin;
+    if(t2<3*DIG.seg){
+      out.truckX=TRUCK_PARK.x; out.parked=true;
+      const k=Math.floor(t2/DIG.seg), r=(t2-k*DIG.seg)/DIG.seg;
+      const last = c===1 && k===2;
+      const rr = last? Math.min(r,.32) : r;
+      out.p = (.68+rr)%1;
+      for(let j=0;j<k;j++) if(!(c===1&&j===2)) digs+=1;
+      if(rr>.32) digs+=curl(out.p);
+      out.load = k + (rr>.3?1:0);
+      if(rr>=.25 && rr<.33) out.fall=(rr-.25)/.08;
+      dumps += out.load;
+    } else {
+      for(let j=0;j<3;j++) if(!(c===1&&j===2)) digs+=1;
+      const k=(t2-3*DIG.seg)/DIG.tout;
+      out.truckX=lerp(TRUCK_PARK.x,45,k*k); out.moving=true; out.load=3; dumps+=3;
+      out.p = c===1? 0 : .68;
+    }
+  }
+  out.digs=digs; out.dumps=dumps; return out;
+}
+let digInfo = digTimeline(-1);
+const _bw = new THREE.Vector3();
+
+/* =========================================================
+   3단계: 말뚝 · 철근 · 기초 콘크리트 · 펌프카 · 레미콘
+   ========================================================= */
+const piles=[]; const pileOrder=[];
+GX.forEach((x,i)=>{ const zs = i%2? [...GX].reverse():GX; zs.forEach(z=>pileOrder.push([x,z])); });
+pileOrder.forEach(([x,z])=>{ const o=mesh(new THREE.CylinderGeometry(.26,.26,6,14),mat.pile,scene); o.position.set(x,0,z); o.userData={x,z}; piles.push(o); });
+
+function makePileDriver(){
+  const g=new THREE.Group(); scene.add(g);
+  for(const x of [-1,1]) mesh(boxB(.7,.75,3.4),mat.dark,g).position.x=x;
+  mesh(boxB(2.4,1.2,2.6),mat.yellow,g).position.set(0,.75,.4);
+  mesh(boxB(1,1.1,1),mat.glass,g).position.set(-.6,1.95,.6);
+  const mast=mesh(boxB(.5,10.5,.5),mat.steel,g); mast.position.set(0,.75,-1.55);
+  link(unitCyl(.08,6),mat.steel,V(0,1.9,.4),V(0,7.5,-1.4),g);
+  const ham=mesh(boxB(.85,1.5,.85),mat.yellowDark,g); ham.position.set(0,6,-1.95);
+  return {g,ham};
+}
+const driver = makePileDriver();
+
+const rebarBars=[];
+for(let i=0;i<15;i++){
+  const t=-7.8+i*(15.6/14);
+  rebarBars.push(link(unitCyl(.045,5),mat.rebar,V(-8,-1.7,t),V(8,-1.7,t),scene,{cast:false}));
+  rebarBars.push(link(unitCyl(.045,5),mat.rebar,V(t,-1.6,-8),V(t,-1.6,8),scene,{cast:false}));
+}
+const foundation = mesh(boxB(2*P,PIT_DEPTH+.04,2*P), mat.found, scene, {cast:false});
+foundation.position.y = -PIT_DEPTH;
+
+const BOOM=17.5;
+function makePumpTruck(){
+  const g=new THREE.Group(); scene.add(g);
+  mesh(boxB(9,.6,2.4),mat.dark,g).position.y=.8;
+  mesh(boxB(1.9,2,2.4),M(0xffffff),g).position.set(3.6,1.05,0);
+  mesh(new THREE.BoxGeometry(.05,.8,2.1),mat.glass,g,{cast:false}).position.set(4.56,2.45,0);
+  mesh(boxB(5.2,1.1,2.3),mat.white,g).position.set(-1.2,1.4,0);
+  for(const x of [2,-3.6]) for(const s of [-1,1]){ const o=mesh(boxB(.25,.25,2.2),mat.red,g); o.position.set(x,.3,s*1.9); }
+  const wheels=[]; for(const x of [3.6,-1.8,-3.2]) for(const z of [-1.1,1.1]) wheels.push(wheel(.55,.45,g,x,.55,z));
+  const turret=new THREE.Group(); turret.position.set(-2.4,2.5,0); g.add(turret);
+  mesh(new THREE.CylinderGeometry(.7,.8,.8,16).translate(0,.4,0),mat.red,turret);
+  const b1=new THREE.Group(); b1.position.y=.9; turret.add(b1);
+  mesh(new THREE.BoxGeometry(.45,.5,1).translate(0,0,.5).scale(1,1,BOOM),mat.red,b1);
+  const b2=new THREE.Group(); b2.position.z=BOOM; b1.add(b2);
+  mesh(new THREE.BoxGeometry(.36,.4,1).translate(0,0,.5).scale(1,1,BOOM),mat.white,b2);
+  const tip=new THREE.Object3D(); tip.position.z=BOOM; b2.add(tip);
+  return {g,turret,b1,b2,tip,wheels};
+}
+const pump = makePumpTruck();
+const hose = mesh(unitCyl(.12,8),mat.dark,scene,{cast:false});
+const PUMP_POS = V(10.2,0,15.4);
+pump.g.position.copy(PUMP_POS); pump.g.rotation.y=Math.PI;
+
+function makeMixer(){
+  const g=new THREE.Group(); scene.add(g);
+  mesh(boxB(7.4,.55,2.3),mat.dark,g).position.y=.8;
+  mesh(boxB(1.9,2,2.4),M(0x2d5fa4),g).position.set(2.8,1.05,0);
+  mesh(new THREE.BoxGeometry(.05,.8,2.1),mat.glass,g,{cast:false}).position.set(3.76,2.45,0);
+  const drumP=new THREE.Group(); drumP.position.set(-.9,2.6,0); drumP.rotation.z=.18; g.add(drumP);
+  const drum=mesh(new THREE.CylinderGeometry(.75,1.25,4.6,20).rotateZ(Math.PI/2),mat.drum,drumP);
+  const wheels=[]; for(const x of [2.8,-1.6,-2.9]) for(const z of [-1.05,1.05]) wheels.push(wheel(.55,.45,g,x,.55,z));
+  return {g,drum,wheels};
+}
+const mixer = makeMixer();
+const MIXER_PARK = V(-2,0,15.6);
+
+/* =========================================================
+   4단계: 골조 (기둥 · 슬래브 · 코어 · 동바리)
+   ========================================================= */
+const floors=[];
+const C_WETC=new THREE.Color(0x4f4d4a), C_DRY=new THREE.Color(0xdedbd3);
+function setConcrete(m,w){
+  m.color.copy(C_DRY).lerp(C_WETC,w); m.roughness=lerp(.92,.1,w); m.metalness=0;
+  if(w>.001||(m.userData.lastW||0)>.001) m.envMapIntensity=lerp(.45,.9,w);
+  m.userData.lastW=w;
+}
+function cageGeo(h){
+  const parts=[];
+  for(const [x,z] of [[-.2,-.2],[.2,-.2],[.2,.2],[-.2,.2]]) parts.push(new THREE.CylinderGeometry(.035,.035,h,5).translate(x,h/2,z));
+  for(let y=.25;y<h;y+=.45){
+    parts.push(new THREE.BoxGeometry(.44,.03,.03).translate(0,y,-.2), new THREE.BoxGeometry(.44,.03,.03).translate(0,y,.2),
+               new THREE.BoxGeometry(.03,.03,.44).translate(-.2,y,0), new THREE.BoxGeometry(.03,.03,.44).translate(.2,y,0));
+  }
+  return mergeGeometries(parts);
+}
+function barGrid(dir){ // dir 0: x방향 철근, 1: z방향 철근
+  const parts=[];
+  for(let i=0;i<=20;i++){ const t=-8+i*.8; parts.push(dir===0? new THREE.BoxGeometry(16.2,.05,.05).translate(0,0,t) : new THREE.BoxGeometry(.05,.05,16.2).translate(t,.06,0)); }
+  return mergeGeometries(parts);
+}
+const gridX=barGrid(0), gridZ=barGrid(1);
+for(let f=0;f<4;f++){
+  const cM=M(0xdedbd3,{roughness:.9}), coreM=M(0xdedbd3,{roughness:.9,transparent:true,opacity:1});
+  const formM=M(0xc99a5f,{roughness:.8,transparent:true,opacity:1});
+  const h=LT[f]-SLAB-BASE[f];
+  const cg=cageGeo(h);
+  const cols=[], cages=[], forms=[];
+  for(const x of GX) for(const z of GX){
+    const cage=mesh(cg,mat.rebar); cage.position.set(x,BASE[f],z); cages.push(cage);
+    const o=mesh(boxB(.6,h,.6),cM); o.position.set(x,BASE[f],z); o.userData.row=GX.indexOf(x); cols.push(o);
+    const fm=mesh(boxB(.86,h,.86),formM); fm.position.set(x,BASE[f],z); forms.push(fm);
+  }
+  // 바닥 거푸집(나무판) + 가장자리 틀
+  const deck=mesh(new THREE.BoxGeometry(16.4,.08,16.4),mat.planks); deck.position.y=LT[f]-SLAB-.04;
+  const edges=[];
+  [[0,8.25,16.6,.1],[0,-8.25,16.6,.1],[8.25,0,.1,16.6],[-8.25,0,.1,16.6]].forEach(([x,z,w,d])=>{ const e=mesh(boxB(w,SLAB+.18,d),formM); e.position.set(x,LT[f]-SLAB,z); edges.push(e); });
+  // 바닥 철근 그물
+  const slabBarsX=mesh(gridX,mat.rebar,scene,{cast:false}); slabBarsX.position.y=LT[f]-SLAB+.12;
+  const slabBarsZ=mesh(gridZ,mat.rebar,scene,{cast:false}); slabBarsZ.position.y=LT[f]-SLAB+.12;
+  // 콘크리트 바닥: 4줄로 나눠 차례로 붓기 (지그재그)
+  const strips=[];
+  for(let i=0;i<4;i++){
+    const g=new THREE.BoxGeometry(16.4,SLAB,4.1).translate(8.2,0,0);
+    const st=mesh(g,cM); const dir = i%2===0? 1 : -1;
+    st.position.set(dir>0?-8.2:8.2, LT[f]-SLAB/2, -6.15+i*4.1); st.rotation.y = dir>0?0:Math.PI;
+    st.userData.dir=dir; strips.push(st);
+  }
+  const core=[];
+  [[0,-1.8,3.6,.25],[0,1.8,3.6,.25],[-1.8,0,.25,3.6],[1.8,0,.25,3.6]].forEach(([x,z,w,d])=>{ const o=mesh(boxB(w,h,d),coreM); o.position.set(x,BASE[f],z); core.push(o); });
+  const props=new THREE.InstancedMesh(unitCyl(.05,5),mat.wood,36); props.castShadow=true;
+  let n=0; const m4=new THREE.Matrix4();
+  for(let i=0;i<6;i++) for(let j=0;j<6;j++){ const x=-6.25+i*2.5, z=-6.25+j*2.5; if(Math.abs(x)<2.2&&Math.abs(z)<2.2) continue; m4.compose(V(x,BASE[f],z),new THREE.Quaternion(),V(1,h-.08,1)); props.setMatrixAt(n++,m4); }
+  props.count=n; scene.add(props);
+  floors.push({cols,cages,forms,deck,edges,slabBarsX,slabBarsZ,strips,core,props,cM,coreM,formM,h});
+}
+// 층 작업 순서 (u: 한 층 안에서 0~1)
+const FU = { cage:[0,.14], forms:[.16,.26], deck:[.24,.31], edge:[.3,.33], slabBar:[.31,.36],
+             colPour:[.36,.47], slabPour:[.47,.68], cure:[.68,.92], strip:[.92,.98] };
+
+/* ---- 콘크리트가 흘러나오는 모습 (펌프카 호스 → 바닥) ---- */
+const flowTex = canvasTex(32,128,(g,w,h)=>{ g.fillStyle='#6d6b67'; g.fillRect(0,0,w,h); for(let i=0;i<10;i++){ g.fillStyle=i%2?'#585652':'#85827d'; g.fillRect(0,i*13+rand()*4,w,5); } });
+const flowMat = M(0xffffff,{map:flowTex,roughness:.15,metalness:.1,envMapIntensity:1.4});
+const stream = mesh(new THREE.CylinderGeometry(.16,.2,1,12).translate(0,.5,0), flowMat, scene, {cast:false});
+const blob = mesh(new THREE.SphereGeometry(.55,14,10), M(0x63615d,{roughness:.1,metalness:.12,envMapIntensity:1.6}), scene, {cast:false});
+const ringMat = new THREE.MeshBasicMaterial({color:0x8e8b85,transparent:true,opacity:.6,depthWrite:false});
+const rings = [0,1,2].map(()=>{ const r=new THREE.Mesh(new THREE.RingGeometry(.8,1,32).rotateX(-Math.PI/2), ringMat.clone()); scene.add(r); return r; });
+stream.visible=blob.visible=false; rings.forEach(r=>r.visible=false);
+
+/* ---- 양생(굳히기) 물 뿌리기 ---- */
+const SPRAY_N = 260;
+const sprayGeo = new THREE.BufferGeometry(); sprayGeo.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(SPRAY_N*3),3));
+const sprayPts = new THREE.Points(sprayGeo, new THREE.PointsMaterial({color:0x7cc7ff,size:.16,transparent:true,opacity:.85,depthWrite:false}));
+sprayPts.frustumCulled=false; scene.add(sprayPts); sprayPts.visible=false;
+const sprayRnd = Array.from({length:SPRAY_N},()=>[rand(),rand()-.5,rand()-.5,rand()]);
+const sprinklers = [makePerson({vest:0x3b6fb6,helmet:0xffffff}), makePerson({vest:0x3b6fb6,helmet:0xffffff})];
+sprinklers.forEach(p=>p.g.visible=false);
+function updateSpray(on,y,time,corners){
+  sprayPts.visible=on; sprinklers.forEach(p=>p.g.visible=on);
+  if(!on) return;
+  const pos=sprayGeo.attributes.position;
+  corners.forEach(([x,z],k)=>{ const p=sprinklers[k]; p.g.position.set(x,y,z); p.g.rotation.y=Math.atan2(-x,-z); p.armR.rotation.x=-1.2; p.armL.rotation.x=-1.0; p.legL.rotation.x=p.legR.rotation.x=0; });
+  for(let i=0;i<SPRAY_N;i++){
+    const [ph,j1,j2,sp]=sprayRnd[i]; const k=i%2; const [cx,cz]=corners[k];
+    const t=((time*.8+ph)%1)*1.15;
+    const dx=-cx, dz=-cz, L=Math.hypot(dx,dz); const sweep=Math.sin(time*.9+k*2)*.5;
+    const ca=Math.cos(sweep), sa=Math.sin(sweep);
+    const ux=(dx*ca-dz*sa)/L, uz=(dx*sa+dz*ca)/L;
+    const v=4.2+sp*1.8;
+    pos.setXYZ(i, cx+ux*.6+(ux*v+j1*1.2)*t, y+1.35+(2.6+j2)*t-4.9*t*t, cz+uz*.6+(uz*v+j2*1.2)*t);
+  }
+  pos.needsUpdate=true;
+}
+
+/* ---- 진행 표시 말풍선 상태 ---- */
+const gauge = {show:false, mode:'', title:'', sub:'', p:0, pos:new THREE.Vector3()};
+let pourTarget = null; // {x,z,y(바닥면)}
+
+/* =========================================================
+   타워크레인
+   ========================================================= */
+const CRANE_POS = V(12.2,0,-7.4);
+const MAST_H = 25;
+function makeCrane(){
+  const g=new THREE.Group(); g.position.copy(CRANE_POS); scene.add(g);
+  mesh(boxB(4,.8,4),mat.concrete,g);
+  const mast=mesh(boxB(1.6,MAST_H,1.6),mat.lattice,g); mast.position.y=.8;
+  mast.material.map.repeat.set(1,MAST_H/1.6);
+  const slew=new THREE.Group(); g.add(slew);
+  mesh(boxB(2,1.2,2),mat.yellow,slew);
+  mesh(boxB(1.3,1.5,1.4),mat.glass,slew).position.set(1.1,0,1.1);
+  const jib=mesh(new THREE.BoxGeometry(1.2,1.3,28).translate(0,.65,14.6),mat.latticeJib,slew); jib.position.y=1.2;
+  mat.latticeJib.map.repeat.set(28/1.3,1);
+  const cj=mesh(new THREE.BoxGeometry(1.2,.8,9).translate(0,.4,-4.5),mat.yellow,slew); cj.position.y=1.2;
+  mesh(boxB(1.8,2,1.6),mat.counterweight,slew).position.set(0,.2,-7.6);
+  mesh(new THREE.ConeGeometry(.9,5,4).translate(0,2.5,0),mat.yellow,slew).position.y=2.2;
+  link(unitCyl(.04,5),mat.steel,V(0,6.8,0),V(0,2.5,18),slew,{cast:false});
+  link(unitCyl(.04,5),mat.steel,V(0,6.8,0),V(0,2,-8),slew,{cast:false});
+  const trolley=mesh(boxB(1,.4,1),mat.dark,slew); trolley.position.y=1.0;
+  const cable=mesh(unitCyl(.035,5),mat.dark,scene,{cast:false});
+  const hook=new THREE.Group(); scene.add(hook);
+  mesh(new THREE.BoxGeometry(.6,.7,.5),mat.yellowDark,hook);
+  const loads=[
+    (()=>{ const lg=new THREE.Group(); for(let i=0;i<9;i++){ const b=mesh(new THREE.CylinderGeometry(.05,.05,5,5).rotateZ(Math.PI/2),mat.rebar,lg); b.position.set(0,-1.2+(i%3)*.12,(Math.floor(i/3)-1)*.12);} return lg; })(),
+    (()=>{ const lg=new THREE.Group(); mesh(boxB(1.6,.15,1.6),mat.wood,lg).position.y=-1.6; mesh(new THREE.BoxGeometry(1.5,.8,1.5),mat.brick,lg).position.y=-1.05; return lg; })(),
+    (()=>{ const lg=new THREE.Group(); mesh(new THREE.BoxGeometry(3,.5,.9),mat.duct,lg).position.y=-1.2; mesh(new THREE.BoxGeometry(3,.5,.9),mat.duct,lg).position.y=-.65; return lg; })(),
+    (()=>{ const lg=new THREE.Group(); for(let i=0;i<4;i++) mesh(new THREE.BoxGeometry(.9,.6,.9),M(0xc8a77a),lg).position.set((i%2-.5)*1,-1.2-(i>1?.6:0),0); return lg; })(),
+  ];
+  loads.forEach(l=>{ hook.add(l); l.visible=false; });
+  [cable,hook].forEach(o=>o.castShadow=true);
+  return {g,mast,slew,trolley,cable,hook,loads};
+}
+const crane = makeCrane();
+// 자재 야적장
+const yard = new THREE.Group(); scene.add(yard); yard.position.set(4,0,-9.6);
+for(let i=0;i<3;i++) mesh(boxB(3,.25,.8),mat.wood,yard).position.set(-3+i*0.2,0,-0.3+i*.0);
+for(let i=0;i<12;i++){ const b=mesh(new THREE.CylinderGeometry(.05,.05,5,5).rotateZ(Math.PI/2),mat.rebar,yard); b.position.set(-4+ (i%4)*.0, .3+Math.floor(i/4)*.1, -.5+(i%4)*.12); }
+mesh(boxB(1.4,.9,1.4),mat.brick,yard).position.set(2.5,0,0);
+mesh(boxB(1.4,.9,1.4),mat.brick,yard).position.set(4.2,0,0);
+
+/* =========================================================
+   5단계: 비계 · 외벽 · 창 · 방수
+   ========================================================= */
+const scaffold = (()=>{
+  const S=9.35, items={posts:[],ledgers:[],planks:[]};
+  const xs=[]; for(let i=0;i<=10;i++) xs.push(-S+i*(2*S/10));
+  const postsXZ=[]; xs.forEach(a=>{ postsXZ.push([a,-S],[a,S]); }); xs.slice(1,-1).forEach(a=>{ postsXZ.push([-S,a],[S,a]); });
+  for(let l=0;l<8;l++){
+    postsXZ.forEach(([x,z])=>items.posts.push({l,p:V(x,l*2,z),q:new THREE.Quaternion(),s:V(1,2,1)}));
+    const y=l*2+2;
+    const qx=new THREE.Quaternion().setFromAxisAngle(V(0,0,1),-Math.PI/2), qz=new THREE.Quaternion().setFromAxisAngle(V(1,0,0),Math.PI/2);
+    items.ledgers.push({l,p:V(-S,y,-S),q:qx,s:V(1,2*S,1)},{l,p:V(-S,y,S),q:qx,s:V(1,2*S,1)},{l,p:V(-S,y,-S),q:qz,s:V(1,2*S,1)},{l,p:V(S,y,-S),q:qz,s:V(1,2*S,1)});
+    const q0=new THREE.Quaternion(), q90=new THREE.Quaternion().setFromAxisAngle(Y,Math.PI/2);
+    items.planks.push({l,p:V(0,y,S-.42),q:q0,s:V(2*S,1,1)},{l,p:V(0,y,-S+.42),q:q0,s:V(2*S,1,1)},{l,p:V(S-.42,y,0),q:q90,s:V(2*S-1.6,1,1)},{l,p:V(-S+.42,y,0),q:q90,s:V(2*S-1.6,1,1)});
+  }
+  const mk=(geo,m,list)=>{ const im=new THREE.InstancedMesh(geo,m,list.length); const m4=new THREE.Matrix4(); list.forEach((it,i)=>{ m4.compose(it.p,it.q,it.s); im.setMatrixAt(i,m4); }); im.castShadow=true; im.receiveShadow=true; scene.add(im); im.userData.levels=list.map(it=>it.l); return im; };
+  return [
+    mk(unitCyl(.05,6),mat.steelLight,items.posts),
+    mk(unitCyl(.045,6),mat.steelLight,items.ledgers),
+    mk(new THREE.BoxGeometry(1,.06,.8),mat.wood,items.planks),
+  ];
+})();
+
+const facadeSides=[0,1,2,3].map(s=>{ const g=new THREE.Group(); g.rotation.y=[0,Math.PI/2,Math.PI,-Math.PI/2][s]; scene.add(g); return g; });
+const fac = {bricks:[[],[],[],[]], windows:[[],[],[],[]], parapet:[], store:[], canopy:[]}; // bricks[f] items {o, part}
+const FZ = 8.25; // 외벽 중심선
+facadeSides.forEach((G,s)=>{
+  // 위층 (2~4층)
+  for(let f=1;f<4;f++){
+    const y0=LT[f-1]-SLAB;
+    const sill=mesh(brickGeo(16.8,1.25,.3),mat.brick,G); sill.position.set(0,y0,FZ); fac.bricks[f].push({o:sill,part:0});
+    let x=-8.2;
+    for(let i=0;i<5;i++){
+      const end=(i===0||i===4); const w=end?1.32:1.12; const cx= i===0? -8.4+w/2 : i===4? 8.4-w/2 : x+.56;
+      const pier=mesh(brickGeo(w,2.0,.3),mat.brick,G); pier.position.set(cx,y0+1.25,FZ); fac.bricks[f].push({o:pier,part:1});
+      x+=1.12;
+      if(i<4){
+        const wx=x+1.35;
+        const wg=new THREE.Group(); wg.position.set(wx,y0+2.25,FZ); G.add(wg);
+        mesh(new THREE.BoxGeometry(2.7,2.0,.14),mat.frame,wg).position.z=-.08;
+        mesh(new THREE.PlaneGeometry(2.52,1.84),mat.glass,wg,{cast:false}).position.z=.0;
+        mesh(new THREE.BoxGeometry(.07,1.84,.08),mat.frame,wg,{cast:false}).position.z=.02;
+        mesh(new THREE.BoxGeometry(2.8,.08,.36),mat.cap,wg,{cast:false}).position.set(0,-1.02,.06);
+        fac.windows[f].push(wg);
+        x+=2.7;
+      }
+    }
+    const head=mesh(brickGeo(16.8,.35,.3),mat.brick,G); head.position.set(0,y0+3.25,FZ); fac.bricks[f].push({o:head,part:2});
+  }
+  // 파라펫
+  const par=mesh(brickGeo(16.8,1.05,.3),mat.brick,G); par.position.set(0,LT[3]-SLAB,FZ); fac.parapet.push(par);
+  const cap=mesh(new THREE.BoxGeometry(16.9,.1,.42).translate(0,.05,0),mat.cap,G); cap.position.set(0,LT[3]-SLAB+1.05,FZ); fac.parapet.push(cap);
+  // 1층 유리 상가
+  const st=new THREE.Group(); st.position.set(0,.02,7.95); G.add(st);
+  const H0=LT[0]-SLAB-.02;
+  mesh(new THREE.PlaneGeometry(16.2,H0),mat.glass,st,{cast:false}).position.set(0,H0/2,0);
+  for(let i=0;i<=8;i++) mesh(boxB(.12,H0,.16),mat.frame,st).position.set(-8.1+i*(16.2/8),0,0);
+  mesh(boxB(16.3,.1,.16),mat.frame,st).position.set(0,H0-.85,0);
+  mesh(boxB(16.3,.25,.18),mat.frame,st).position.set(0,0,0);
+  mesh(boxB(16.3,.12,.16),mat.frame,st).position.set(0,H0-.12,0);
+  fac.store.push(st);
+  // 캐노피 (앞, 오른쪽)
+  if(s!==2){ const cn=mesh(new THREE.BoxGeometry(17.4,.2,1.6).translate(0,0,.8),M(0x4d4a46,{roughness:.6}),G); cn.position.set(0,3.6,8.4); fac.canopy.push(cn); }
+});
+const membrane=mesh(new THREE.PlaneGeometry(16,16).rotateX(-Math.PI/2).translate(8,0,0),mat.membrane,scene,{cast:false});
+membrane.position.set(-8,LT[3]+.015,0);
+
+/* =========================================================
+   6단계: 설비 (배관 · 전기 · 덕트 · 냉난방기 · 엘리베이터)
+   ========================================================= */
+const mep={water:[],elec:[],duct:[],roof:[],fans:[]};
+const ceilY = f=>LT[f]-SLAB-.45;
+mep.water.push(link(pipeGeo(.22,15.4),mat.water,V(-2.25,.02,-2.25),V(-2.25,15.4,-2.25)));
+mep.elec.push(link(pipeGeo(.18,15.4),mat.elec,V(2.25,.02,-2.25),V(2.25,15.4,-2.25)));
+mep.duct.push(link(new THREE.BoxGeometry(.9,1,.9).translate(0,.5,0),mat.duct,V(0,.02,-2.55),V(0,15.6,-2.55)));
+for(let f=0;f<4;f++){
+  const y=ceilY(f)+.1;
+  mep.water.push(link(pipeGeo(.16,9.5),mat.water,V(-2.25,y,-2.25),V(-2.25,y,7.2)));
+  mep.water.push(link(pipeGeo(.16,5),mat.water,V(-2.25,y,4),V(-7.2,y,4)));
+  mep.elec.push(link(pipeGeo(.12,9.5),mat.elec,V(2.25,y+.15,-2.25),V(2.25,y+.15,7.2)));
+  mep.elec.push(link(pipeGeo(.12,5),mat.elec,V(2.25,y+.15,2),V(7.2,y+.15,2)));
+  mep.elec.push(link(pipeGeo(.12,5),mat.elec,V(2.25,y+.15,5.5),V(7.2,y+.15,5.5)));
+  mep.duct.push(link(new THREE.BoxGeometry(1.1,1,.5).translate(0,.5,0),mat.duct,V(0,y-.05,-3.2),V(-7.2,y-.05,-3.2)));
+  mep.duct.push(link(new THREE.BoxGeometry(1.1,1,.5).translate(0,.5,0),mat.duct,V(0,y-.05,-3.2),V(7.2,y-.05,-3.2)));
+  mep.duct.push(link(new THREE.BoxGeometry(.9,1,.45).translate(0,.5,0),mat.duct,V(-5,y-.05,-3.2),V(-5,y-.05,7.2)));
+}
+mep.water.forEach(o=>o.userData.floor=o.position.y<1&&o.userData.L>14?-1:Math.floor((o.position.y)/3.6));
+[ [-4.2,-4.5], [2.4,-5.2] ].forEach(([x,z],i)=>{
+  const g=new THREE.Group(); g.position.set(x,LT[3],z); scene.add(g);
+  mesh(boxB(2.8,1.5,2.0),mat.steelLight,g);
+  for(const dx of [-.65,.65]){ const fn=mesh(new THREE.CylinderGeometry(.55,.55,.08,16),mat.dark,g); fn.position.set(dx,1.55,0); mep.fans.push(fn); }
+  mep.roof.push(g);
+});
+const elevator = mesh(boxB(1.5,2.4,1.5),mat.steelLight,scene); elevator.position.set(0,.02,0);
+const elevLight = mesh(new THREE.BoxGeometry(1.2,.05,1.2),mat.lightPanel,elevator,{cast:false}); elevLight.position.y=2.38;
+
+/* =========================================================
+   7단계: 실내
+   ========================================================= */
+const interior=[];
+for(let f=0;f<4;f++){
+  const y0=BASE[f]+.02, cy=ceilY(f), H=cy-y0;
+  const parts=[];
+  parts.push((()=>{ const o=mesh(boxB(5.8,H,.12),mat.partition); o.position.set(-5.1,y0,-4.6); return o; })());
+  parts.push((()=>{ const o=mesh(boxB(.12,H,5),mat.partition); o.position.set(4.6,y0,-5.5); return o; })());
+  parts.push((()=>{ const o=mesh(boxB(.12,H,3.4),mat.partition); o.position.set(-4.6,y0,-6.3); return o; })());
+  const fl=mesh(new THREE.PlaneGeometry(16,16).rotateX(-Math.PI/2).translate(8,0,0), f===0?mat.floorStone:mat.floorWood, scene, {cast:false});
+  fl.position.set(-8,y0+.03,0);
+  const ce=mesh(new THREE.PlaneGeometry(16,16).rotateX(Math.PI/2).translate(8,0,0),mat.ceiling,scene,{cast:false,recv:true});
+  ce.position.set(-8,cy,0);
+  const lights=[]; for(const x of [-5,0,5]) for(const z of [-5.6,1,5.2]){ if(Math.abs(x)<2.2&&Math.abs(z)<2.2) continue; const l=mesh(new THREE.PlaneGeometry(1.4,1.4).rotateX(Math.PI/2),mat.lightPanel,scene,{cast:false}); l.position.set(x,cy-.02,z); lights.push(l); }
+  const pl=new THREE.PointLight(0xffe0b8,0,24,1.6); pl.position.set(0,cy-.4,3); scene.add(pl);
+  const furn=[];
+  const desks = f===0 ? [[-5,4.2],[-5,6.4],[5,4.2],[5,6.4],[0,5.6]] : [[-5,3.8],[-5,6.2],[0,3.8],[0,6.2],[5,3.8],[5,6.2]];
+  desks.forEach(([x,z])=>{
+    const g=new THREE.Group(); g.position.set(x,y0,z); scene.add(g);
+    if(f===0){ mesh(new THREE.CylinderGeometry(.6,.6,.06,16).translate(0,.74,0),mat.deskTop,g); mesh(unitCyl(.06,6).scale(1,.72,1),mat.dark,g);
+      for(const a of [0,Math.PI]){ const c=mesh(boxB(.45,.45,.45),mat.chair,g); c.position.set(Math.cos(a)*1,0,Math.sin(a)*1); } }
+    else { mesh(boxB(1.8,.06,.85).translate(0,.72,0),mat.deskTop,g); for(const dx of [-.8,.8]) mesh(boxB(.06,.72,.8),mat.dark,g).position.x=dx;
+      const c=mesh(boxB(.5,.48,.5),mat.chair,g); c.position.set(0,0,.75); mesh(boxB(.5,.5,.08),mat.chair,g).position.set(0,.48,1); }
+    furn.push(g);
+  });
+  [[7,-6.8],[-7,7],[6.8,7]].forEach(([x,z])=>{ const g=new THREE.Group(); g.position.set(x,y0,z); scene.add(g);
+    mesh(new THREE.CylinderGeometry(.28,.22,.5,12).translate(0,.25,0),mat.pot,g); mesh(new THREE.SphereGeometry(.5,12,10),mat.leafDark,g).position.y=1.0; furn.push(g); });
+  if(f===0){ const g=new THREE.Group(); g.position.set(-2,y0,-6.5); scene.add(g); mesh(boxB(5,1.05,.9),mat.deskTop,g); furn.push(g); }
+  interior.push({parts,fl,ce,lights,pl,furn,H});
+}
+
+/* =========================================================
+   8단계: 조경 · 가로등
+   ========================================================= */
+const trees=[], lamps=[], lampLights=[];
+[[-6.5,12.2],[0.5,12.2],[7.5,12.2],[-11.8,4.5],[-11.8,-3.5],[12.3,4]].forEach(([x,z])=>{
+  const g=new THREE.Group(); g.position.set(x,0,z); scene.add(g);
+  mesh(boxB(1.6,.7,1.6),mat.pot,g);
+  mesh(new THREE.CylinderGeometry(.09,.13,2.4,8).translate(0,1.2,0),mat.trunk,g).position.y=.7;
+  [[0,3.4,0,1.0],[.55,3.0,.3,.8],[-.5,3.1,-.2,.85],[0,2.7,-.5,.75]].forEach(([a,b,c,r])=>mesh(new THREE.IcosahedronGeometry(r,1),mat.leaf,g).position.set(a,b,c));
+  trees.push(g);
+});
+[[-16,13.3],[14,13.3]].forEach(([x,z])=>{
+  const g=new THREE.Group(); g.position.set(x,0,z); scene.add(g);
+  mesh(new THREE.CylinderGeometry(.08,.12,6,8).translate(0,3,0),mat.dark,g);
+  mesh(new THREE.BoxGeometry(.2,.1,1.4).translate(0,0,-.6),mat.dark,g).position.y=6;
+  mesh(new THREE.BoxGeometry(.4,.12,.7),mat.lampHead,g,{cast:false}).position.set(0,5.92,-1.1);
+  const L=new THREE.PointLight(0xffd59a,0,26,1.6); L.position.set(x,5.6,z-1.1); scene.add(L); lampLights.push(L);
+  lamps.push(g);
+});
+
+/* =========================================================
+   이름표 (3D 위치에 HTML 라벨)
+   ========================================================= */
+const LABELS = [
+  {t:'울타리', d:'공사장 안으로 사람이 들어오지 않게 막아요.', pos:()=>V(-13,2.6,0), on:T=>inWin(T,.2,1.0)||inWin(T,7.0,7.25)},
+  {t:'현장 사무소', d:'공사를 관리하는 사람들이 일하는 임시 사무실이에요.', pos:()=>office.position.clone().add(V(0,3.4,0)), on:T=>inWin(T,.42,1.0)},
+  {t:'측량기', d:'건물이 들어설 정확한 위치와 높이를 재는 기계예요.', pos:()=>V(10.2,2.4,9.2), on:T=>inWin(T,.5,1.1)},
+  {t:'흙막이 벽', d:'구덩이 옆의 흙이 무너지지 않게 막아 줘요.', pos:()=>V(-8.3,.6,-8.3), on:T=>inWin(T,1.05,2.0)},
+  {t:'굴착기', d:'커다란 삽이 달린 팔로 땅을 파는 기계예요.', pos:()=>exc.g.position.clone().add(V(0,4.4,0)), on:T=>inWin(T,1.13,1.94)},
+  {t:'덤프트럭', d:'짐칸을 기울여 흙이나 모래를 쏟아 내리는 트럭이에요.', pos:()=>dump.g.position.clone().add(V(0,3.5,0)), on:T=>dump.g.visible},
+  {t:'말뚝 박는 기계', d:'긴 말뚝을 망치처럼 두드려 땅속 깊이 박아요.', pos:()=>driver.g.position.clone().add(V(0,11.8,0)), on:T=>inWin(T,2.02,2.4)},
+  {t:'철근', d:'콘크리트 속에 들어가 건물이 쉽게 부러지지 않게 해요.', pos:()=>V(-5,0,-5), on:T=>inWin(T,2.38,2.52)},
+  {t:'레미콘 트럭', d:'통을 계속 돌려서 콘크리트가 굳지 않게 실어 와요.', pos:()=>mixer.g.position.clone().add(V(0,4.2,0)), on:T=>inWin(T,2.48,3.95)},
+  {t:'펌프카', d:'긴 팔로 높은 곳까지 콘크리트를 보내 줘요.', pos:()=>pump.g.position.clone().add(V(-2,3.8,0)), on:T=>inWin(T,2.48,3.95)},
+  {t:'타워크레인', d:'무거운 자재를 높은 곳까지 들어 올려 옮겨요.', pos:()=>V(CRANE_POS.x,MAST_H+5.5,CRANE_POS.z), on:T=>inWin(T,3.08,6.98)},
+  {t:'거푸집 (나무 틀)', d:'콘크리트가 굳을 때까지 모양을 잡아 주는 틀이에요.', pos:()=>{ const f=clamp(Math.floor((curT-3)/.25),0,3); return V(-7.5,LT[f]+.3,7.5); }, on:T=>{ if(!inWin(T,3,4)) return false; const u=((T-3)/.25)%1; return u>.17&&u<.36; }},
+  {t:'비계 (작업 발판)', d:'바깥벽 공사를 위해 건물 둘레에 세운 임시 발판이에요.', pos:()=>V(9.35,9,9.35), on:T=>inWin(T,4.06,4.88)},
+  {t:'냉난방 기계', d:'건물 안을 따뜻하거나 시원하게 만드는 기계예요.', pos:()=>V(-4.2,LT[3]+2.4,-4.5), on:T=>inWin(T,5.62,6.02)},
+  {t:'엘리베이터', d:'건물 가운데 통로를 오르내리며 사람을 실어 날라요.', pos:()=>elevator.position.clone().add(V(0,2.9,0)), on:T=>inWin(T,5.76,6.02)},
+];
+const labelEls = LABELS.map(L=>{
+  const el=document.createElement('div'); el.className='lbl';
+  el.innerHTML=`<div class="d">${L.d}</div><div class="pill">${L.t}</div><div class="stem"></div>`;
+  el.addEventListener('pointerdown',e=>{ e.stopPropagation(); if(e.target.closest('.d')) return; const o=el.classList.contains('open'); document.querySelectorAll('.lbl.open').forEach(x=>x.classList.remove('open')); if(!o){ el.classList.add('open'); sfx('pop'); } });
+  $('labels').appendChild(el); return el;
+});
+
+const LABEL_TEXT = {
+  ko: LABELS.map(label=>[label.t,label.d]),
+  ru: [
+  [
+    "Забор",
+    "Не даёт посторонним заходить на стройплощадку."
+  ],
+  [
+    "Штаб стройки",
+    "Временный офис, где работают специалисты, управляющие строительством."
+  ],
+  [
+    "Геодезический прибор",
+    "Помогает точно определить положение и высотные отметки будущего здания."
+  ],
+  [
+    "Ограждение котлована",
+    "Удерживает грунт по краям котлована и предотвращает обрушение."
+  ],
+  [
+    "Экскаватор",
+    "Роет землю ковшом, закреплённым на большой подвижной стреле."
+  ],
+  [
+    "Самосвал",
+    "Перевозит грунт или песок и выгружает его, наклоняя кузов."
+  ],
+  [
+    "Сваебойная установка",
+    "Ударами молота забивает длинные сваи глубоко в грунт."
+  ],
+  [
+    "Арматура",
+    "Стальные стержни внутри бетона помогают конструкции выдерживать растяжение и не разрушаться."
+  ],
+  [
+    "Автобетоносмеситель",
+    "Везёт бетон, постоянно вращая барабан, чтобы смесь оставалась однородной и пригодной для укладки."
+  ],
+  [
+    "Автобетононасос",
+    "Подаёт бетон на высоту по трубопроводу на длинной стреле."
+  ],
+  [
+    "Башенный кран",
+    "Поднимает тяжёлые материалы и перемещает их на большую высоту."
+  ],
+  [
+    "Опалубка (деревянная форма)",
+    "Придаёт бетону нужную форму и удерживает его, пока он не затвердеет."
+  ],
+  [
+    "Строительные леса",
+    "Временные рабочие площадки вокруг здания для устройства наружных стен."
+  ],
+  [
+    "Климатическое оборудование",
+    "Обогревает или охлаждает воздух в здании."
+  ],
+  [
+    "Лифт",
+    "Перевозит людей между этажами, двигаясь по шахте в центре здания."
+  ]
+]
+};
+function translateLabels(){
+  LABEL_TEXT[I18N.language].forEach(([title,description],index)=>{
+    LABELS[index].t=title; LABELS[index].d=description;
+    labelEls[index].querySelector('.pill').textContent=title;
+    labelEls[index].querySelector('.d').textContent=description;
+  });
+}
+translateLabels();
+
+/* =========================================================
+   상태 계산 (T: 0~8 진행도)
+   ========================================================= */
+let curT = 8, stageIdx = 0, playing = false, started = false;
+let xray = true, cutaway = true, night = false;
+let xrayK = 0, cutK = 0, nightK = 0;
+const tmpC = new THREE.Color();
+
+function topLevel(T){
+  if(T<3) return .02;
+  const k=(T-3)/.25, f=Math.floor(k);
+  if(f>=4) return LT[3];
+  const u=k-f; return u>.3? LT[f] : (f>0? LT[f-1] : .02);
+}
+function setTransp(m,flag){ if(m.transparent!==flag){ m.transparent=flag; m.needsUpdate=true; } }
+function update(T, time, dt){
+  // ---------- 땅 / 구덩이
+  digInfo = digTimeline((T-DIG.start)*STAGES[1].dur);
+  const depth = PIT_DEPTH*clamp(digInfo.digs/6);
+  pitFloor.position.y = -depth+.001;
+  pitFloor.visible = T<2.95;
+  pitWalls.forEach(w=>{ w.visible = depth>.01 && T<2.95; w.scale.y = Math.max(depth,.001); });
+  shoring.forEach((o,i)=>{ const k=easeOut(seg(T,1.0+i*.0038,1.03+i*.0038)); o.visible = k>0 && T<2.95; o.position.y = -2.6 + (1-k)*8; });
+  siteDirt.visible = true;
+  { const op=seg(T,7.3,7.45); mat.plaza.opacity=op; sitePlaza.visible=op>0; setTransp(mat.plaza,op<1); mat.plaza.depthWrite=op>=1; }
+
+  // ---------- 울타리 · 사무소 · 측량
+  const nF=fencePanels.length;
+  fencePanels.forEach((p,i)=>{
+    const kin=backOut(seg(T,.02+.28*i/nF,.07+.28*i/nF)); const kout=1-ease(seg(T,7.18+.12*(nF-i)/nF,7.22+.12*(nF-i)/nF));
+    const k=Math.min(kin,kout); p.visible=k>.01; p.scale.y=Math.max(k,.01);
+  });
+  { const kin=easeOut(seg(T,.33,.43)), kout=ease(seg(T,7.18,7.3)); office.visible=T>=.33&&kout<1; office.position.y=(1-kin)*9+kout*12; }
+  { const k=seg(T,.4,.46); toilet.visible=k>0&&T<7.24; toilet.position.y=(1-easeOut(k))*7; }
+  const surveyOn = T<1.2;
+  stakes.forEach((s,i)=>{ const k=seg(T,.48+i*.03,.53+i*.03); s.visible=k>0&&surveyOn; s.scale.y=Math.max(easeOut(k),.01); });
+  strings.forEach((s,i)=>{ grow(s, ease(seg(T,.6+i*.06,.66+i*.06))); if(!surveyOn) s.visible=false; });
+  chalks.forEach((s,i)=>{ grow(s, ease(seg(T,.74+i*.05,.79+i*.05))); if(!surveyOn||T>1.3) s.visible=false; });
+  tripod.visible = inWin(T,.47,1.12);
+
+  // ---------- 굴착기
+  exc.g.visible = inWin(T,1.1,2.0);
+  if(exc.g.visible){
+    const kin=easeOut(seg(T,1.1,1.165)), kout=ease(seg(T,1.935,1.995));
+    exc.g.position.set(EXC_POS.x+kout*16, 0, lerp(24,EXC_POS.z,kin));
+    exc.g.rotation.y = kout>0? -Math.PI/2*kout : 0;
+    const p = digInfo.p;
+    const K=[0,.25,.42,.55,.68,.85,.93,1];
+    const Y1=EXC_TRUCK_YAW;
+    exc.upper.rotation.y = kout>0? 0 : keyInterp(K,[Y1,0,0,0,0,Y1,Y1,Y1],p);
+    exc.boomP.rotation.x = keyInterp(K,[.45,.2,-.3,-.32,.45,.45,.45,.45],p);
+    exc.armP.rotation.x  = keyInterp(K,[-.85,-.6,-1.1-depth*.12,-1.5,-1.0,-.85,-.85,-.85],p);
+    exc.bucketP.rotation.x=keyInterp(K,[1.0,.5,.3,-1.3,-1.4,-1.4,1.0,1.0],p);
+    exc.dirt.visible = p>.5 && p<.9 && kout===0 && T>=DIG.start;
+  }
+  // ---------- 덤프트럭 (굴착기와 같은 타임라인)
+  dump.g.visible = digInfo.truckX!==null && T<2.0;
+  fallDirt.visible = false;
+  if(dump.g.visible){
+    dump.g.position.set(digInfo.truckX,0,TRUCK_PARK.z);
+    let loadK = digInfo.load/3;
+    if(digInfo.fall>=0){
+      const f=clamp(digInfo.fall);
+      exc.bucketP.getWorldPosition(_bw);
+      const bx=digInfo.truckX-.9, by=2.1+loadK*.6, bz=TRUCK_PARK.z;
+      fallDirt.visible = f<.98;
+      fallDirt.position.set(lerp(_bw.x,bx,f), lerp(_bw.y-.3,by,f*f), lerp(_bw.z,bz,f));
+      fallDirt.scale.setScalar(1+f*.5);
+      fallDirt.rotation.y += dt*3;
+    }
+    dump.load.visible = loadK>.02; dump.load.scale.set(1,Math.max(loadK,.02),1); dump.load.position.y=.2+.5*loadK;
+    if(digInfo.moving && playing) dump.wheels.forEach(w=>w.rotation.z -= dt*7);
+  }
+  // ---------- 말뚝 · 말뚝 박는 기계
+  const PW=.0225, P0=2.02;
+  piles.forEach((pl,i)=>{
+    const a=P0+i*PW, u=seg(T,a,a+PW);
+    pl.visible = T>=a+PW*.3 && T<2.98;
+    const drive = ease(seg(u,.4,1));
+    const top = lerp(4.2,-1.85,drive);
+    pl.position.y = top-3;
+    if(u<.4){ pl.position.y = 4.2-3 + (1-seg(u,.3,.4))*2; }
+  });
+  driver.g.visible = inWin(T,2.0,2.42);
+  if(driver.g.visible){
+    const i=clamp(Math.floor((T-P0)/PW),0,piles.length-1);
+    const u=seg(T,P0+i*PW,P0+(i+1)*PW);
+    const cur=pileOrder[i], prev=pileOrder[Math.max(i-1,0)];
+    const mv=ease(seg(u,0,.3));
+    const px=lerp(prev[0],cur[0],mv), pz=lerp(prev[1],cur[1],mv);
+    const sx=Math.sign(px)||1;
+    driver.g.position.set(px - sx*1.55*0 , -PIT_DEPTH, pz + 1.55);
+    driver.g.rotation.y = 0;
+    const kin=seg(T,2.0,2.03); driver.g.scale.setScalar(Math.max(backOut(kin),.01));
+    const pileTop = lerp(4.2,-1.85,ease(seg(u,.4,1)));
+    driver.ham.position.y = Math.max(pileTop+PIT_DEPTH-.75,1.2) + (u>.4&&u<1? Math.abs(Math.sin(time*9))*.8 : 0);
+  }
+
+  // ---------- 철근 · 기초 콘크리트
+  rebarBars.forEach((b,i)=>{ grow(b, ease(seg(T,2.385+i*.0035,2.415+i*.0035))); if(T>2.8) b.visible=false; });
+  gauge.show=false; pourTarget=null;
+  let sprayOn=false, sprayY=0, sprayCorners=null;
+  { const k=seg(T,2.52,2.78); foundation.visible=k>0; foundation.scale.y=Math.max(k,.001);
+    setConcrete(mat.found, 1-ease(seg(T,2.8,2.98)));
+    const lvl=-PIT_DEPTH+(PIT_DEPTH+.04)*k;
+    if(inWin(T,2.52,2.78)){
+      pourTarget={x:Math.sin(time*.55)*5.2, z:Math.cos(time*.43)*5.2, y:lvl};
+      gauge.show=true; gauge.mode='pour'; gauge.title=t('foundationPour'); gauge.sub=t('foundationPourDetail'); gauge.p=k; gauge.pos.set(-4,1.5,-4);
+    } else if(inWin(T,2.78,3.0)){
+      const c=seg(T,2.8,2.98);
+      gauge.show=true; gauge.mode='cure'; gauge.title=c<1?t('foundationCure',{day:Math.max(1,Math.round(c*28))}):t('foundationCured'); gauge.sub=c<1?t('foundationCureDetail'):t('foundationCuredDetail'); gauge.p=c; gauge.pos.set(-4,1.5,-4);
+      sprayOn = T<2.985; sprayY=.02; sprayCorners=[[-7.9,7.9],[7.9,-7.9]];
+    }
+  }
+
+  // ---------- 골조 (철근 → 거푸집 → 콘크리트 붓기 → 굳히기 → 틀 떼기)
+  floors.forEach((F,f)=>{
+    const a=3+f*.25, u=seg(T,a,a+.25), vis=T>=a;
+    const S=(r)=>seg(u,FU[r][0],FU[r][1]);
+    // 1) 기둥 철근
+    const kc=ease(S('cage'));
+    F.cages.forEach((c,i)=>{ const k=ease(seg(u,FU.cage[0]+i*.004,FU.cage[1]-(15-i)*.004)); c.visible=vis&&k>0&&u<FU.colPour[1]; c.scale.y=Math.max(k,.001); });
+    // 2) 기둥 거푸집
+    const kf=ease(S('forms')), strip=ease(S('strip'));
+    const colFill = (row)=>ease(seg(u,FU.colPour[0]+row*.0275,FU.colPour[0]+(row+1)*.0275));
+    const seeThrough = inWin(u,FU.colPour[0]-.01,FU.colPour[1]+.02) ? .32 : 1;
+    F.formM.opacity = Math.min(seeThrough, 1-strip); setTransp(F.formM, F.formM.opacity<.995); F.formM.depthWrite=F.formM.opacity>.5;
+    F.forms.forEach((fm,i)=>{ fm.visible=vis&&kf>0&&strip<1; fm.scale.set(1+strip*.5,Math.max(kf,.001),1+strip*.5); });
+    // 3) 바닥 거푸집 · 받침 · 가장자리 · 바닥 철근
+    const kd=ease(S('deck'));
+    F.deck.visible=vis&&kd>0&&u<FU.strip[1]; F.deck.scale.set(Math.max(kd,.01),1,Math.max(kd,.01));
+    F.props.visible=vis&&u>=FU.deck[0]&&u<FU.strip[1];
+    const ke=ease(S('edge'));
+    F.edges.forEach(e=>{ e.visible=vis&&ke>0&&strip<1; e.scale.y=Math.max(ke,.001); });
+    const kb=ease(S('slabBar'));
+    F.slabBarsX.visible=vis&&kb>0&&u<FU.slabPour[1]; F.slabBarsX.scale.x=Math.max(Math.min(kb*2,1),.01);
+    F.slabBarsZ.visible=vis&&kb>.5&&u<FU.slabPour[1]; F.slabBarsZ.scale.z=Math.max(kb*2-1,.01);
+    // 4) 콘크리트: 기둥 줄마다 채우고 → 바닥을 4줄로 지그재그 붓기
+    F.cols.forEach(c=>{ const k=colFill(c.userData.row); c.visible=vis&&k>0; c.scale.y=Math.max(k,.001); });
+    const kcore=ease(seg(u,FU.colPour[0]+.02,FU.colPour[1]));
+    F.core.forEach(c=>{ c.visible=vis&&kcore>0; c.scale.y=Math.max(kcore,.001); });
+    const sp0=FU.slabPour[0], sl=(FU.slabPour[1]-FU.slabPour[0])/4;
+    F.strips.forEach((st,i)=>{ const k=seg(u,sp0+i*sl,sp0+(i+1)*sl); st.visible=vis&&k>0; st.scale.x=Math.max(k,.001); });
+    // 5) 굳히기: 반짝이는 진회색 → 밝은 회색
+    const cure=S('cure');
+    setConcrete(F.cM, 1-ease(cure)); F.coreM.color.copy(F.cM.color);
+    if(!vis) return;
+    if(u>=FU.colPour[0] && u<FU.colPour[1]){
+      const row=clamp(Math.floor((u-FU.colPour[0])/.0275),0,3), k=colFill(row);
+      const zi=Math.floor((time*1.6)%4);
+      pourTarget={x:GX[row], z:GX[zi], y:BASE[f]+F.h*k};
+      gauge.show=true; gauge.mode='pour'; gauge.title=t('columnPour',{floor:f+1}); gauge.sub=t('columnPourDetail'); gauge.p=seg(u,FU.colPour[0],FU.slabPour[1]); gauge.pos.set(GX[row],LT[f]+1.2,-7.5);
+    } else if(u>=FU.slabPour[0] && u<FU.slabPour[1]){
+      const i=clamp(Math.floor((u-sp0)/sl),0,3), k=seg(u,sp0+i*sl,sp0+(i+1)*sl), st=F.strips[i];
+      const x = st.userData.dir>0 ? -8.2+16.4*k : 8.2-16.4*k;
+      pourTarget={x, z:st.position.z, y:LT[f]};
+      gauge.show=true; gauge.mode='pour'; gauge.title=t('slabPour',{floor:f+1}); gauge.sub=t('slabPourDetail'); gauge.p=seg(u,FU.colPour[0],FU.slabPour[1]); gauge.pos.set(0,LT[f]+.6,-8.2);
+    } else if(u>=FU.cure[0] && u<FU.strip[1]+.02){
+      const c=ease(cure);
+      gauge.show=true; gauge.mode='cure'; gauge.pos.set(0,LT[f]+.6,-8.2);
+      if(u<FU.cure[1]){ gauge.title=t('floorCure',{floor:f+1,day:Math.max(1,Math.round(c*28))}); gauge.sub=t('floorCureDetail'); gauge.p=c;
+        sprayOn=true; sprayY=LT[f]; sprayCorners=[[-7.4,7.4],[7.4,-7.4]]; }
+      else { gauge.title=t('removeForms'); gauge.sub=t('removeFormsDetail'); gauge.p=1; }
+    }
+  });
+  // ---------- 레미콘 · 펌프카
+  const concreteOn = inWin(T,2.42,3.98);
+  mixer.g.visible = concreteOn; pump.g.visible = concreteOn; hose.visible = false;
+  if(concreteOn){
+    const kin=easeOut(seg(T,2.42,2.5)), kout=ease(seg(T,3.92,3.98));
+    mixer.g.position.set(lerp(-45,MIXER_PARK.x,kin)-kout*45,0,MIXER_PARK.z);
+    pump.g.position.set(PUMP_POS.x+(1-kin)*45+kout*45,0,PUMP_POS.z);
+    mixer.drum.rotation.x += dt*2.2;
+    if(kin<1||kout>0){ mixer.wheels.forEach(w=>w.rotation.z-=dt*6); pump.wheels.forEach(w=>w.rotation.z+=dt*6); }
+    // 붐 목표점
+    aimBoom(pourTarget? V(pourTarget.x, pourTarget.y+3.8, pourTarget.z) : null);
+  }
+
+  // 콘크리트 줄기 · 튀는 모습
+  { const on = !!pourTarget && concreteOn && pump.g.visible;
+    stream.visible=blob.visible=on; rings.forEach(r=>r.visible=on);
+    if(on){
+      const tip=new THREE.Vector3(); pump.tip.getWorldPosition(tip);
+      const top=tip.y-2.4, bot=pourTarget.y;
+      stream.position.set(tip.x,bot,tip.z); stream.scale.set(1,Math.max(top-bot,.05),1);
+      flowTex.offset.y += dt*3;
+      blob.position.set(tip.x,bot+.05,tip.z); const w=Math.sin(time*14)*.12; blob.scale.set(1.25+w,.32-w*.4,1.25-w);
+      rings.forEach((r,i)=>{ const ph=(time*1.2+i/3)%1; r.position.set(tip.x,bot+.03,tip.z); r.scale.setScalar(.6+ph*2.6); r.material.opacity=.55*(1-ph); });
+    }
+  }
+  updateSpray(sprayOn,sprayY,time,sprayCorners||[[0,0],[0,0]]);
+
+  // ---------- 타워크레인
+  updateCrane(T,time);
+
+  // ---------- 비계
+  { const up=16*ease(seg(T,4.0,4.18)), down=ease(seg(T,4.88,4.98));
+    const H = T<4.88? up : 16*(1-down);
+    scaffold.forEach(im=>{ const lv=im.userData.levels; let n=0; while(n<lv.length && lv[n]*2+1.9<=H) n++; im.count=n; im.visible=n>0 && T<4.99; });
+  }
+
+  // ---------- 외벽
+  for(let f=1;f<4;f++){
+    const a=4.15+(f-1)*.13, u=seg(T,a,a+.13);
+    fac.bricks[f].forEach(({o,part})=>{ const k=ease(seg(u,[0,.3,.65][part],[.35,.7,1][part])); o.visible=k>0; o.scale.y=Math.max(k,.001); });
+    const wa=4.58+(f-1)*.07;
+    fac.windows[f].forEach((w,i)=>pop(w,seg(T,wa+i*.008,wa+.04+i*.008)));
+  }
+  fac.parapet.forEach(o=>{ const k=ease(seg(T,4.54,4.6)); o.visible=k>0; o.scale.y=Math.max(k,.001); });
+  fac.store.forEach(o=>{ const k=ease(seg(T,4.7,4.8)); o.visible=k>0; o.scale.y=Math.max(k,.001); });
+  fac.canopy.forEach(o=>{ const k=ease(seg(T,4.8,4.86)); o.visible=k>0; o.scale.z=Math.max(k,.001); });
+  { const k=ease(seg(T,4.84,4.97)); membrane.visible=k>0; membrane.scale.x=Math.max(k,.001); }
+
+  // ---------- 설비
+  const pipesOn = T>=5 && T<6.47;
+  mep.water.forEach((o,i)=>{ grow(o, ease(seg(T, i===0?5.01:5.08+(i-1)*.018, i===0?5.09:5.12+(i-1)*.018))); if(!pipesOn) o.visible=false; });
+  mep.elec.forEach((o,i)=>{ grow(o, ease(seg(T, i===0?5.26:5.33+(i-1)*.012, i===0?5.33:5.37+(i-1)*.012))); if(!pipesOn) o.visible=false; });
+  mep.duct.forEach((o,i)=>{ grow(o, ease(seg(T, i===0?5.5:5.56+(i-1)*.012, i===0?5.57:5.6+(i-1)*.012))); if(!pipesOn) o.visible=false; });
+  mep.roof.forEach((g,i)=>pop(g,seg(T,5.62+i*.04,5.68+i*.04)));
+  mep.fans.forEach(fn=>fn.rotation.y += dt*8);
+  tex.flowBlue.offset.y -= dt*.8; tex.flowYellow.offset.y -= dt*1.6;
+  mat.elec.emissiveIntensity = .4+.35*Math.sin(time*6);
+  elevator.visible = T>=5.76;
+  if(elevator.visible){
+    const k=seg(T,5.76,5.82);
+    const cyc=(time%18)/18; const stops=[0,3,1,2,0];
+    const idx=Math.floor(cyc*4), lt=(cyc*4)%1;
+    const yA=BASE[stops[idx]], yB=BASE[stops[idx+1]];
+    elevator.position.y = lerp(yA,yB,ease(clamp((lt-.35)/.65)));
+    elevator.scale.setScalar(Math.max(backOut(k),.01));
+    mat.lightPanel.emissiveIntensity = Math.max(mat.lightPanel.emissiveIntensity, 0);
+  }
+
+  // ---------- 실내
+  let litMax=0;
+  interior.forEach((I,f)=>{
+    I.parts.forEach((p,i)=>{ const k=ease(seg(T,6.02+f*.03+i*.012,6.08+f*.03+i*.012)); p.visible=k>0; p.scale.y=Math.max(k,.001); });
+    { const k=ease(seg(T,6.22+f*.035,6.3+f*.035)); I.fl.visible=k>0; I.fl.scale.x=Math.max(k,.001); }
+    { const k=ease(seg(T,6.42+f*.03,6.5+f*.03)); I.ce.visible=k>0; I.ce.scale.x=Math.max(k,.001); }
+    const lit=seg(T,6.53+f*.02,6.6+f*.02); litMax=Math.max(litMax,lit);
+    I.lights.forEach(l=>l.visible=lit>0);
+    I.pl.intensity = lit*(22 + 55*nightK);
+    I.furn.forEach((g,i)=>pop(g,seg(T,6.64+f*.05+i*.01,6.68+f*.05+i*.01)));
+  });
+  mat.lightPanel.emissiveIntensity = litMax*1.6 + (T>=5.76?0.6:0);
+
+  // ---------- 조경 · 사람
+  trees.forEach((g,i)=>pop(g,seg(T,7.36+i*.03,7.44+i*.03)));
+  lamps.forEach((g,i)=>{ const k=ease(seg(T,7.44+i*.04,7.5+i*.04)); g.visible=k>0; g.scale.y=Math.max(k,.001); });
+  lampLights.forEach(L=>L.intensity = (T>=7.5? 1:0) * nightK * 45);
+  mat.lampHead.emissiveIntensity = (T>=7.5?1:0) * (.2 + nightK*2.5);
+
+  workers.forEach((w,i)=>{
+    const p=w.p;
+    let on, y=0, pos, moving=true;
+    if(w.top){
+      if(inWin(T,1.95,2.98)){ on=true; y = T<2.52? -PIT_DEPTH : lerp(-PIT_DEPTH,.02,seg(T,2.52,2.78)); }
+      else if(inWin(T,3.05,4.95)){ on=true; y = topLevel(T); }
+      else if(inWin(T,4.95,6.95)){ on=true; y = BASE[(i)%4]; }
+      else on=false;
+      pos = pathPos(w.path,time*w.sp+w.off);
+    } else {
+      on = inWin(T,.25,7.2);
+      pos = pathPos(w.path,time*w.sp+w.off);
+      if(i===0 && T<1.15 && T>=.47){ pos={x:10.2,z:8.4,h:0}; moving=false; }
+    }
+    p.g.visible=on;
+    if(on){ p.g.position.set(pos.x,y,pos.z); p.g.rotation.y=pos.h; walkAnim(p,time,moving); }
+  });
+  civilians.forEach(c=>{
+    c.p.g.visible = T>=7.55;
+    if(c.p.g.visible){ const pos=pathPos(c.path,time*c.sp+c.off); c.p.g.position.set(pos.x,0,pos.z); c.p.g.rotation.y=pos.h; walkAnim(c.p,time,true,6); }
+  });
+
+  // ---------- 보기 모드 (투시 / 앞벽 열기 / 밤)
+  const xrayTarget = (stageIdx===5 && xray && started) ? 1 : 0;
+  const cutTarget = (stageIdx===6 && cutaway && started) ? 1 : 0;
+  const nightTarget = (stageIdx===7 && night && started) ? 1 : 0;
+  xrayK += (xrayTarget-xrayK)*Math.min(1,dt*4);
+  cutK += (cutTarget-cutK)*Math.min(1,dt*5);
+  nightK += (nightTarget-nightK)*Math.min(1,dt*2.2);
+  const facOp = 1 - .86*xrayK;
+  [mat.brick,mat.frame,mat.cap].forEach(m=>{ m.opacity=facOp; setTransp(m,facOp<.995); m.depthWrite=facOp>.6; });
+  mat.glass.opacity = .55*(1-.7*xrayK);
+  floors.forEach(F=>{ F.coreM.opacity=1-.8*xrayK; setTransp(F.coreM,xrayK>.005); F.coreM.depthWrite=xrayK<.4; });
+  const hideFront = cutK>.5;
+  facadeSides[0].visible = !hideFront; facadeSides[1].visible = !hideFront;
+
+  // 낮/밤
+  sun.intensity = lerp(2.7,.04,nightK);
+  hemi.intensity = lerp(.95,.14,nightK);
+  hemi.color.set(0xe3efff).lerp(tmpC.set(0x6f84c4),nightK);
+  renderer.toneMappingExposure = lerp(1.0,1.1,nightK);
+  mat.glass.emissiveIntensity = nightK * 2.8 * (T>=6.55?1:0);
+  if(Math.abs(nightK-(update._lastNight??-1))>.002){
+    paintSky(nightK); update._lastNight=nightK;
+    allMats.forEach(m=>{ m.envMapIntensity = m.userData.env*(1-.88*nightK); });
+  }
+}
+
+function aimBoom(target){
+  // 터렛 월드 위치
+  const base = new THREE.Vector3(); pump.turret.getWorldPosition(base); base.y += .9;
+  let tgt = target;
+  if(!tgt){ tgt = base.clone().add(V(-3,1.2,-1.5)); }
+  const dx=tgt.x-base.x, dz=tgt.z-base.z, dy=tgt.y-base.y;
+  const worldYaw = Math.atan2(dx,dz);
+  pump.turret.rotation.y = worldYaw - pump.g.rotation.y;
+  const L1=BOOM,L2=BOOM; const h=Math.hypot(dx,dz);
+  const d=Math.min(Math.hypot(h,dy), L1+L2-.05);
+  const beta=Math.atan2(dy,h);
+  const c=clamp((L1*L1+d*d-L2*L2)/(2*L1*d),-1,1);
+  const a1=beta+Math.acos(c);
+  const ex=L1*Math.cos(a1), ey=L1*Math.sin(a1);
+  const a2=Math.atan2(dy-ey, h-ex);
+  pump.b1.rotation.x = -a1; pump.b2.rotation.x = -(a2-a1);
+  if(target){
+    const tip=new THREE.Vector3(); pump.tip.getWorldPosition(tip);
+    hose.visible=true; hose.position.set(tip.x,tip.y-2.4,tip.z); hose.scale.set(1,2.4,1);
+  }
+}
+
+const craneState={yaw:0.4,r:16,h:8};
+function updateCrane(T,time){
+  const on = inWin(T,3.0,7.2);
+  crane.g.visible = on; crane.cable.visible=on; crane.hook.visible=on;
+  if(!on) return;
+  const rise = ease(seg(T,3.0,3.07)) * (1-ease(seg(T,7.0,7.18)));
+  const mh = MAST_H*Math.max(rise,.02);
+  crane.mast.scale.y = Math.max(rise,.02);
+  crane.slew.position.y = .8+mh;
+  crane.slew.visible = rise>.3;
+  const jibY = .8+mh+1.2;
+  const working = inWin(T,3.08,6.96);
+  const yard = V(4,0,-9.6);
+  let yaw, r, hy, loadOn=false;
+  const top = topLevel(T)+ (T>=4?0:0);
+  const cyc = Math.floor(time/14), p=(time/14)%1;
+  const rx = Math.sin(cyc*12.9898)*4, rz = Math.cos(cyc*7.233)*4;
+  const drop = V(rx, top, rz);
+  const toPolar = v=>{ const dx=v.x-CRANE_POS.x, dz=v.z-CRANE_POS.z; return [Math.atan2(dx,dz), clamp(Math.hypot(dx,dz),4,27)]; };
+  const [yY,rY]=toPolar(yard), [yD,rD]=toPolar(drop);
+  const lerpAng=(a,b,t)=>{ let d=((b-a+Math.PI)%(Math.PI*2)+Math.PI*2)%(Math.PI*2)-Math.PI; return a+d*t; };
+  const hHigh = Math.max(top+7, 9);
+  if(!working){ yaw=yY; r=10; hy=jibY-3; }
+  else if(p<.14){ yaw=yY; r=rY; hy=lerp(hHigh,1.6,ease(p/.14)); }
+  else if(p<.24){ yaw=yY; r=rY; hy=lerp(1.6,hHigh,ease((p-.14)/.1)); loadOn=true; }
+  else if(p<.48){ const t=ease((p-.24)/.24); yaw=lerpAng(yY,yD,t); r=lerp(rY,rD,t); hy=hHigh; loadOn=true; }
+  else if(p<.58){ yaw=yD; r=rD; hy=lerp(hHigh,top+1.8,ease((p-.48)/.1)); loadOn=true; }
+  else if(p<.64){ yaw=yD; r=rD; hy=top+1.8; loadOn=p<.62; }
+  else if(p<.72){ yaw=yD; r=rD; hy=lerp(top+1.8,hHigh,ease((p-.64)/.08)); }
+  else { const t=ease((p-.72)/.28); yaw=lerpAng(yD,yY,t); r=lerp(rD,rY,t); hy=hHigh; }
+  hy = Math.min(hy, jibY-2);
+  crane.slew.rotation.y = yaw;
+  crane.trolley.position.z = r;
+  const tx = CRANE_POS.x + Math.sin(yaw)*r, tz = CRANE_POS.z + Math.cos(yaw)*r;
+  crane.hook.position.set(tx,hy,tz);
+  crane.cable.position.set(tx,hy+.35,tz); crane.cable.scale.set(1,Math.max(jibY-(hy+.35),.01),1);
+  crane.cable.visible = rise>.3; crane.hook.visible = rise>.3;
+  const li = T<4?0: T<5?1: T<6?2:3;
+  crane.loads.forEach((l,i)=>l.visible = loadOn && i===li);
+}
+
+/* =========================================================
+   카메라 이동
+   ========================================================= */
+let fly=null;
+function camPreset(c){
+  const t=V(...c.t), off=V(...c.p).sub(t);
+  const sc = Math.min(freeArea.w/864, freeArea.h/740);
+  const mul = clamp(innerHeight/(800*sc), .75, 2.6);
+  return {t, p:t.clone().add(off.multiplyScalar(mul))};
+}
+function flyTo(c,dur=1.8){
+  const to=camPreset(c);
+  fly={fromP:camera.position.clone(),fromT:controls.target.clone(),toP:to.p,toT:to.t,t:0,dur};
+}
+let camFollow=false;
+controls.addEventListener('start',()=>{ fly=null; camFollow=false; $('hint').style.opacity=0; });
+
+/* =========================================================
+   레이아웃 (패널 피해서 화면 중앙 맞추기)
+   ========================================================= */
+const freeArea={w:innerWidth,h:innerHeight};
+function layout(){
+  const w=innerWidth, h=innerHeight;
+  renderer.setSize(w,h); camera.aspect=w/h;
+  const panel=$('panel'), pr=panel.getBoundingClientRect();
+  const tb=document.querySelector('.topbar').getBoundingClientRect().bottom;
+  const side = getComputedStyle(panel).right==='12px' && pr.width<w*.7;
+  let ox=0, oy=0;
+  if(!started){ freeArea.w=w; freeArea.h=h; ox=-w*.12; }
+  else if(side){ ox=(pr.width+12)/2; oy=-(tb)/2*.6; freeArea.w=w-pr.width-24; freeArea.h=h-tb; }
+  else { const ph=h-pr.top; oy=(ph-tb)/2; freeArea.w=w; freeArea.h=h-ph-tb; }
+  camera.setViewOffset(w,h,ox,oy,w,h);
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize',()=>{ layout(); if(started && !fly) flyTo(STAGES[stageIdx].cam,.8); });
+
+/* =========================================================
+   소리 (Web Audio로 직접 합성 – 외부 파일 없음)
+   ========================================================= */
+const SND = { ctx:null, master:null, bgm:null, sfx:null, mode:2, noise:null, layers:{} };
+// mode: 2 = 배경음+효과음, 1 = 효과음만, 0 = 끔
+function initAudio(){
+  if(SND.ctx){ if(SND.ctx.state==='suspended') SND.ctx.resume(); return; }
+  const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
+  const ctx = SND.ctx = new AC();
+  const comp = ctx.createDynamicsCompressor(); comp.threshold.value=-14; comp.ratio.value=4; comp.connect(ctx.destination);
+  SND.master = ctx.createGain(); SND.master.gain.value = .9; SND.master.connect(comp);
+  // 배경음: 살짝 울림(딜레이)을 더해 부드럽게
+  SND.bgm = ctx.createGain(); SND.bgm.gain.value = .13;
+  const dl = ctx.createDelay(1); dl.delayTime.value = .32; const fb = ctx.createGain(); fb.gain.value=.22; const wet=ctx.createGain(); wet.gain.value=.25;
+  SND.bgm.connect(SND.master); SND.bgm.connect(dl); dl.connect(fb); fb.connect(dl); dl.connect(wet); wet.connect(SND.master);
+  SND.sfx = ctx.createGain(); SND.sfx.gain.value = .55; SND.sfx.connect(SND.master);
+  // 백색 소음 버퍼
+  const buf = ctx.createBuffer(1, ctx.sampleRate*2, ctx.sampleRate); const d=buf.getChannelData(0);
+  for(let i=0;i<d.length;i++) d[i]=Math.random()*2-1;
+  SND.noise = buf;
+  // 계속 이어지는 소리: 엔진 / 콘크리트 붓는 소리
+  const mkLoop=(filterType,freq,q)=>{ const src=ctx.createBufferSource(); src.buffer=buf; src.loop=true; const f=ctx.createBiquadFilter(); f.type=filterType; f.frequency.value=freq; f.Q.value=q; const g=ctx.createGain(); g.gain.value=0; src.connect(f); f.connect(g); g.connect(SND.sfx); src.start(); return {g,f}; };
+  SND.layers.engine = mkLoop('lowpass',160,.8);
+  { const o=ctx.createOscillator(); o.type='sawtooth'; o.frequency.value=46; const f=ctx.createBiquadFilter(); f.type='lowpass'; f.frequency.value=140; const g=ctx.createGain(); g.gain.value=0; o.connect(f); f.connect(g); g.connect(SND.sfx); o.start(); SND.layers.engineTone={g,o}; }
+  SND.layers.pour = mkLoop('bandpass',650,.9);
+  applySoundMode();
+  startBgm();
+  document.addEventListener('visibilitychange',()=>{ if(!SND.ctx) return; document.hidden? SND.ctx.suspend() : SND.ctx.resume(); });
+}
+function applySoundMode(){
+  if(!SND.ctx) return; const t=SND.ctx.currentTime;
+  SND.master.gain.setTargetAtTime(SND.mode===0?0:.9,t,.05);
+  SND.bgm.gain.setTargetAtTime(SND.mode===2?.13:0,t,.15);
+}
+const mtof = m => 440*Math.pow(2,(m-69)/12);
+function piano(midi,t,vel=.5,dest=SND.bgm,len=1.6){
+  const ctx=SND.ctx, f=mtof(midi);
+  const out=ctx.createGain(); out.gain.value=0;
+  const lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=Math.min(9000,f*6); lp.connect(dest);
+  out.connect(lp);
+  [[1,1],[2,.42],[3,.16],[4,.07]].forEach(([h,w])=>{ const o=ctx.createOscillator(); o.type='sine'; o.frequency.value=f*h*(1+(h-1)*.0008); const g=ctx.createGain(); g.gain.value=w; o.connect(g); g.connect(out); o.start(t); o.stop(t+len+.1); });
+  out.gain.setValueAtTime(0,t); out.gain.linearRampToValueAtTime(vel,t+.006);
+  out.gain.exponentialRampToValueAtTime(vel*.35,t+.18); out.gain.exponentialRampToValueAtTime(.0001,t+len);
+}
+function tone(freq,t,dur,{type='sine',vol=.2,to=null,attack=.004}={}){
+  const ctx=SND.ctx, o=ctx.createOscillator(), g=ctx.createGain();
+  o.type=type; o.frequency.setValueAtTime(freq,t); if(to) o.frequency.exponentialRampToValueAtTime(to,t+dur);
+  g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+attack); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  o.connect(g); g.connect(SND.sfx); o.start(t); o.stop(t+dur+.05);
+}
+function noiseHit(t,dur,{type='bandpass',freq=1000,to=null,q=1,vol=.3,attack=.003}={}){
+  const ctx=SND.ctx, s=ctx.createBufferSource(); s.buffer=SND.noise;
+  const f=ctx.createBiquadFilter(); f.type=type; f.frequency.setValueAtTime(freq,t); if(to) f.frequency.exponentialRampToValueAtTime(to,t+dur); f.Q.value=q;
+  const g=ctx.createGain(); g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+attack); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  s.connect(f); f.connect(g); g.connect(SND.sfx); s.start(t, Math.random()*1.5); s.stop(t+dur+.05);
+}
+const SFX = {
+  click:  t=>{ tone(1046,t,.07,{vol:.12}); tone(1568,t+.03,.06,{vol:.08}); },
+  chime:  t=>{ [72,76,79,84].forEach((m,i)=>piano(m,t+i*.07,.32,SND.sfx,1.2)); },
+  knock:  t=>{ noiseHit(t,.07,{freq:850,q:4,vol:.5}); tone(190,t,.06,{type:'triangle',vol:.15,to:120}); },
+  thud:   t=>{ tone(110,t,.32,{vol:.55,to:42}); noiseHit(t,.18,{type:'lowpass',freq:380,vol:.35}); },
+  clang:  t=>{ [1180,1873,2655,3310].forEach((f,i)=>tone(f*(.97+Math.random()*.06),t,.45-i*.06,{vol:.07})); noiseHit(t,.03,{type:'highpass',freq:3000,vol:.15}); },
+  tick:   t=>{ tone(1900,t,.04,{type:'square',vol:.05}); noiseHit(t,.03,{freq:2500,q:3,vol:.2}); },
+  zip:    t=>{ noiseHit(t,.28,{freq:1500,to:6500,q:6,vol:.22,attack:.02}); },
+  spray:  t=>{ noiseHit(t,.5,{type:'highpass',freq:3500,vol:.14,attack:.05}); },
+  scoop:  t=>{ noiseHit(t,.55,{type:'lowpass',freq:700,to:250,vol:.35,attack:.05}); },
+  dump:   t=>{ noiseHit(t,1.0,{type:'lowpass',freq:500,to:180,vol:.45,attack:.08}); for(let i=0;i<6;i++) noiseHit(t+.1+i*.11,.08,{freq:400+Math.random()*500,q:3,vol:.18}); },
+  beep:   t=>{ tone(1050,t,.18,{type:'square',vol:.05}); tone(1050,t+.45,.18,{type:'square',vol:.05}); },
+  hammer: t=>{ tone(85,t,.28,{vol:.6,to:40}); noiseHit(t,.06,{freq:1400,q:2,vol:.35}); tone(620,t,.15,{type:'triangle',vol:.06}); },
+  clink:  t=>{ tone(2400+Math.random()*300,t,.16,{vol:.06}); tone(3150,t+.01,.12,{vol:.04}); },
+  ding:   t=>{ piano(84,t,.35,SND.sfx,1.4); piano(91,t+.12,.3,SND.sfx,1.6); },
+  tap:    t=>{ noiseHit(t,.045,{freq:2300+Math.random()*600,q:7,vol:.22}); tone(520,t,.035,{type:'triangle',vol:.06}); },
+  ting:   t=>{ tone(2637,t,.6,{vol:.06}); tone(3951,t+.005,.45,{vol:.04}); },
+  bloop:  t=>{ tone(260,t,.16,{vol:.22,to:620}); tone(420,t+.09,.12,{vol:.12,to:820}); },
+  zap:    t=>{ tone(110,t,.14,{type:'square',vol:.06}); noiseHit(t,.14,{type:'highpass',freq:2600,vol:.16}); tone(1760,t,.08,{type:'sawtooth',vol:.03,to:880}); },
+  whoosh: t=>{ noiseHit(t,.55,{freq:350,to:1600,q:1.2,vol:.22,attack:.12}); },
+  elev:   t=>{ piano(88,t,.35,SND.sfx,1.5); piano(84,t+.35,.33,SND.sfx,1.8); },
+  switch: t=>{ noiseHit(t,.02,{type:'highpass',freq:4000,vol:.35}); tone(1500,t,.02,{type:'square',vol:.05}); },
+  pop:    t=>{ tone(520,t,.09,{vol:.16,to:950}); },
+  popHi:  t=>{ tone(780,t,.09,{vol:.14,to:1400}); },
+  stamp:  t=>{ SFX.thud(t); [72,76,79,84,88].forEach((m,i)=>piano(m,t+.25+i*.09,.34,SND.sfx,1.6)); [72,76,79,84].forEach(m=>piano(m,t+.8,.22,SND.sfx,2.6)); },
+  night:  t=>{ [79,76,72].forEach((m,i)=>piano(m,t+i*.12,.25,SND.sfx,1.6)); },
+  day:    t=>{ [72,76,79].forEach((m,i)=>piano(m,t+i*.1,.25,SND.sfx,1.4)); },
+};
+function sfx(name,delay=0){ if(!SND.ctx||SND.mode===0||SND.ctx.state!=='running') return; SFX[name](SND.ctx.currentTime+.01+delay); }
+
+/* ---- 배경음: 밝고 가벼운 피아노 (직접 작곡한 8마디 반복) ---- */
+const BGM = (()=>{
+  const _=null;
+  const mel = [
+    [76,_,79,_,84,_,79,76],[74,_,79,_,83,_,81,79],[72,_,76,_,81,_,79,76],[77,_,81,_,84,_,81,_],
+    [79,76,79,84,_,83,84,_],[83,_,86,_,83,81,79,_],[81,_,84,_,83,_,86,_],[84,_,_,_,79,_,76,_],
+    [76,77,79,_,79,_,76,_],[74,76,77,_,77,_,74,_],[72,74,76,_,81,_,79,_],[77,_,76,_,74,_,72,_],
+    [76,_,79,_,84,_,86,_],[83,_,81,_,79,_,77,_],[76,_,77,_,79,_,74,_],[72,_,_,_,_,_,_,_],
+  ];
+  const roots = [48,43,45,41,48,43,[41,43],48, 48,43,45,41,48,43,[41,43],48];
+  return {mel,roots};
+})();
+let bgmNext=0, bgmStep=0, bgmTimer=null;
+function startBgm(){
+  if(bgmTimer) return;
+  bgmNext = SND.ctx.currentTime + .3;
+  const eighth = 60/100/2;
+  bgmTimer = setInterval(()=>{
+    if(!SND.ctx || SND.ctx.state!=='running') return;
+    while(bgmNext < SND.ctx.currentTime + .25){
+      const bar = Math.floor(bgmStep/8)%16, e = bgmStep%8;
+      const m = BGM.mel[bar][e];
+      if(m) piano(m, bgmNext, e%2===0?.42:.32, SND.bgm, 1.5);
+      let r = BGM.roots[bar]; if(Array.isArray(r)) r = r[e<4?0:1];
+      const arp = [0,7,12,16,12,7,12,7][e];
+      piano(r+arp - (e===0?0:0), bgmNext, e===0?.38:.2, SND.bgm, e===0?2.2:1.0);
+      if(e===0) piano(r-12, bgmNext, .22, SND.bgm, 2.4);
+      bgmNext += eighth; bgmStep++;
+    }
+  }, 40);
+}
+
+/* ---- 진행도(T)에 맞춰 울리는 효과음 목록 ---- */
+const EVENTS = (()=>{
+  const ev=[]; const add=(t,n)=>ev.push([t,n]);
+  const nF=fencePanels.length; for(let i=0;i<nF;i+=3) add(.02+.28*i/nF+.03,'knock');
+  add(.43,'thud'); add(.46,'knock');
+  [.5,.53,.56,.59].forEach(t=>add(t,'tick'));
+  [.63,.69,.75,.81].forEach(t=>add(t,'zip'));
+  add(.76,'spray');
+  for(let i=0;i<36;i+=3) add(1.0+i*.0038+.03,'clang');
+  for(let t=2.385;t<2.5;t+=.014) add(t,'clink');
+  [2.8,2.84,2.88,2.92,2.96].forEach(t=>add(t,'spray')); add(2.985,'ding');
+  for(let f=0;f<4;f++){ const a=3+f*.25, L=.25;
+    [.01,.05,.09,.13].forEach(u=>add(a+u*L,'clink'));
+    [.17,.2,.23,.26,.28,.31].forEach(u=>add(a+u*L,'knock'));
+    [.32,.34].forEach(u=>add(a+u*L,'clink'));
+    [.7,.76,.82,.88].forEach(u=>add(a+u*L,'spray'));
+    [.92,.935,.95].forEach(u=>add(a+u*L,'knock'));
+    add(a+.97*L,'ding'); }
+  for(let t=4.01;t<4.18;t+=.02) add(t,'clang');
+  for(let t=4.16;t<4.55;t+=.011) add(t,'tap');
+  for(let t=4.585;t<4.8;t+=.018) add(t,'ting');
+  add(4.71,'whoosh'); add(4.81,'thud'); add(4.85,'whoosh');
+  for(let t=4.89;t<4.98;t+=.025) add(t,'clang');
+  [5.02,5.09,5.13,5.17,5.21].forEach(t=>add(t,'bloop'));
+  [5.27,5.34,5.39,5.44].forEach(t=>add(t,'zap'));
+  [5.51,5.57,5.63].forEach(t=>add(t,'whoosh'));
+  [5.63,5.67].forEach(t=>add(t,'thud'));
+  add(5.77,'elev');
+  for(let t=6.03;t<6.2;t+=.03) add(t,'thud');
+  for(let t=6.23;t<6.37;t+=.035) add(t,'whoosh');
+  [6.54,6.56,6.58,6.6].forEach(t=>add(t,'switch'));
+  for(let t=6.65;t<6.92;t+=.02) add(t,'pop');
+  add(7.01,'whoosh'); add(7.12,'thud');
+  for(let t=7.19;t<7.31;t+=.02) add(t,'knock');
+  add(7.2,'whoosh'); add(7.31,'spray');
+  for(let t=7.37;t<7.53;t+=.03) add(t,'popHi');
+  add(7.45,'switch'); add(7.49,'switch');
+  add(7.8,'stamp');
+  return ev.sort((a,b)=>a[0]-b[0]);
+})();
+let prevT=0;
+const loopState={dig:-1,truck:-1,hammer:-1,crane:-1};
+function updateSound(T,time,dt){
+  if(!SND.ctx || SND.ctx.state!=='running'){ prevT=T; return; }
+  // 1) T가 지나간 순간의 효과음 (재생 중일 때만, 한 프레임에 너무 많이 울리지 않게)
+  if(playing && T>prevT && T-prevT<.05){
+    let n=0; for(const [t,name] of EVENTS){ if(t>prevT && t<=T && n<4){ sfx(name); n++; } }
+  }
+  prevT=T;
+  // 2) 기계가 반복하는 소리 (시간 기반)
+  const live = playing;
+  if(live && inWin(T,DIG.start,DIG.end)){
+    const dg=Math.floor(digInfo.digs+.5), dp=digInfo.dumps, pk=digInfo.parked?1:0;
+    if(loopState.dig!==null && typeof loopState.dig==='object'){
+      if(dg>loopState.dig.dg) sfx('scoop');
+      if(dp>loopState.dig.dp) sfx('dump');
+      if(pk && !loopState.dig.pk) sfx('beep');
+    }
+    loopState.dig={dg,dp,pk};
+  } else loopState.dig=null;
+  if(live && inWin(T,2.02,2.4)){
+    const i=Math.floor((T-2.02)/.0225), u=((T-2.02)/.0225)%1;
+    const k=Math.floor(time*9/Math.PI);
+    if(u>.4 && k!==loopState.hammer){ sfx('hammer'); }
+    loopState.hammer=k;
+  }
+  if(live && inWin(T,3.08,6.96)){
+    const p=(time/14)%1, ck=Math.floor(time/14)*10+(p>.62?1:0);
+    if(ck!==loopState.crane){ if(loopState.crane>=0 && p>.62) sfx('knock'); loopState.crane=ck; }
+  }
+  // 3) 이어지는 소리 크기
+  let eng=0;
+  if(inWin(T,1.1,2.0)) eng=.5; if(inWin(T,2.0,2.42)) eng=.45; if(inWin(T,2.5,3.98)) eng=Math.max(eng,.32);
+  if(inWin(T,3.0,7.2)) eng=Math.max(eng,.16);
+  let pour=0;
+  if(pourTarget) pour=.45;
+  if(!live){ eng*=0; pour=0; }
+  const t=SND.ctx.currentTime;
+  SND.layers.engine.g.gain.setTargetAtTime(eng*.9,t,.2);
+  SND.layers.engineTone.g.gain.setTargetAtTime(eng*.35,t,.2);
+  SND.layers.engineTone.o.frequency.setTargetAtTime(44+Math.sin(time*3)*3,t,.1);
+  SND.layers.pour.g.gain.setTargetAtTime(pour*(.8+.2*Math.sin(time*5)),t,.15);
+}
+
+/* ---- 소리 버튼 & 알림 ---- */
+const SOUND_LABEL=['🔇','🔔','🔊'], SOUND_TEXT=['soundOff','soundEffects','soundAll'];
+function syncSoundBtn(){
+  const b=$('btnSound'); b.textContent=SOUND_LABEL[SND.mode]; b.classList.toggle('on',SND.mode>0);
+  b.title=t('soundTitle')+' · '+t(SOUND_TEXT[SND.mode]); b.setAttribute('aria-label',b.title);
+}
+$('btnSound').addEventListener('click',()=>{
+  initAudio(); SND.mode=(SND.mode+2)%3; applySoundMode(); syncSoundBtn(); toast(t(SOUND_TEXT[SND.mode])); if(SND.mode>0) sfx('click');
+});
+let toastTimer=null;
+function toast(msg){ const el=$('toast'); el.textContent=msg; el.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove('show'),1400); }
+syncSoundBtn();
+
+/* =========================================================
+   UI
+   ========================================================= */
+const stepper=$('stepper');
+// Drag the stage strip without triggering a stage button on release.
+let stepperDrag=null, suppressStepperClick=false;
+stepper.addEventListener('pointerdown',event=>{
+  suppressStepperClick=false;
+  if(event.pointerType!=='mouse' || event.button!==0) return;
+  if(stepper.scrollWidth<=stepper.clientWidth) return;
+  const scrollLeft=stepper.scrollLeft;
+  stepper.scrollTo({left:scrollLeft,behavior:'instant'});
+  stepperDrag={id:event.pointerId,x:event.clientX,left:scrollLeft,moved:false};
+});
+stepper.addEventListener('pointermove',event=>{
+  if(!stepperDrag || event.pointerId!==stepperDrag.id) return;
+  const delta=event.clientX-stepperDrag.x;
+  if(!stepperDrag.moved && Math.abs(delta)<6) return;
+  if(!stepperDrag.moved){
+    stepperDrag.moved=true;
+    suppressStepperClick=true;
+    stepper.classList.add('dragging');
+    stepper.setPointerCapture(event.pointerId);
+  }
+  event.preventDefault();
+  stepper.scrollLeft=stepperDrag.left-delta;
+});
+function finishStepperDrag(event){
+  if(!stepperDrag || event.pointerId!==stepperDrag.id) return;
+  stepperDrag=null;
+  stepper.classList.remove('dragging');
+  if(stepper.hasPointerCapture(event.pointerId)) stepper.releasePointerCapture(event.pointerId);
+}
+window.addEventListener('pointerup',finishStepperDrag);
+window.addEventListener('pointercancel',finishStepperDrag);
+stepper.addEventListener('lostpointercapture',finishStepperDrag);
+stepper.addEventListener('click',event=>{
+  if(!suppressStepperClick || event.detail===0) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  suppressStepperClick=false;
+},true);
+STAGES.forEach((s,i)=>{
+  const b=document.createElement('button'); b.className='st'; b.innerHTML=`<b>${i+1}</b><span>${s.short}</span>`;
+  b.addEventListener('click',()=>{ if(!started) begin(); initAudio(); goStage(i); });
+  stepper.appendChild(b);
+});
+const subsEl=$('subs');
+function renderStageUI(){
+  const s=STAGES[stageIdx];
+  $('badge').textContent=t('badge',{step:stageIdx+1});
+  $('term').textContent=s.term;
+  $('title').textContent=s.title;
+  $('lead').textContent=s.lead;
+  $('desc').textContent=s.desc;
+  $('tip').textContent=s.tip;
+  subsEl.innerHTML='';
+  s.subs.forEach(([name,a],k)=>{
+    const b=document.createElement('button'); b.className='sub'; b.innerHTML=`<i></i><span>${name}</span>`;
+    b.addEventListener('click',()=>{
+      if(s.cycle){ const f=clamp(Math.floor((curT-3)/.25),0,3); curT=3+f*.25+a*.25+.0001; }
+      else curT=stageIdx+a+.0001;
+      playing=true; syncPlay(); prevT=curT; sfx('click');
+    });
+    subsEl.appendChild(b);
+  });
+  $('floorinfo').style.display = s.cycle?'block':'none';
+  $('legend').style.display = s.toggle==='xray'?'flex':'none';
+  [...stepper.children].forEach((b,i)=>{ b.classList.toggle('cur',i===stageIdx); b.classList.toggle('done',i<stageIdx); });
+  stepper.children[stageIdx].scrollIntoView({inline:'center',block:'nearest',behavior:'smooth'});
+  $('prev').disabled = stageIdx===0;
+  $('next').textContent = t(stageIdx===7?'restart':'next');
+  syncToggle();
+  $('panel').querySelector('.pbody').scrollTop=0;
+}
+function syncToggle(){
+  const s=STAGES[stageIdx], toggleButton=$('toggle');
+  if(!s.toggle){ toggleButton.style.display='none'; return; }
+  toggleButton.style.display='block';
+  if(s.toggle==='xray'){ toggleButton.textContent = t(xray?'xrayOn':'xrayOff'); toggleButton.classList.toggle('on',xray); }
+  if(s.toggle==='cut'){ toggleButton.textContent = t(cutaway?'cutOn':'cutOff'); toggleButton.classList.toggle('on',cutaway); }
+  if(s.toggle==='night'){ toggleButton.textContent = t(night?'nightOn':'nightOff'); toggleButton.classList.toggle('on',night); }
+}
+$('toggle').addEventListener('click',()=>{
+  const s=STAGES[stageIdx];
+  if(s.toggle==='xray') xray=!xray;
+  if(s.toggle==='cut') cutaway=!cutaway;
+  if(s.toggle==='night'){ night=!night; sfx(night?'night':'day'); } else sfx('click');
+  syncToggle();
+});
+function syncPlay(){
+  const button=$('play'); button.textContent=playing?'⏸':'▶';
+  button.title=t(playing?'pause':'resume'); button.setAttribute('aria-label',button.title);
+  button.setAttribute('aria-pressed',String(playing));
+}
+function goStage(i){
+  stageIdx=clamp(i,0,7); curT=stageIdx; playing=true;
+  xray=true; cutaway=true; night=false;
+  document.querySelectorAll('.lbl.open').forEach(x=>x.classList.remove('open'));
+  camFollow = stageIdx===3;
+  prevT=curT; renderStageUI(); syncPlay(); layout(); flyTo(STAGES[stageIdx].cam);
+  sfx('chime');
+}
+$('prev').addEventListener('click',()=>goStage(stageIdx-1));
+$('next').addEventListener('click',()=>goStage(stageIdx===7?0:stageIdx+1));
+$('replay').addEventListener('click',()=>goStage(stageIdx));
+$('play').addEventListener('click',()=>{ if(!playing && curT>=stageIdx+1-1e-4){ curT=stageIdx; prevT=curT; } playing=!playing; syncPlay(); sfx('click'); });
+$('btnCam').addEventListener('click',()=>{ flyTo(started?STAGES[stageIdx].cam:INTRO_CAM,1.2); sfx('whoosh'); });
+$('btnLabels').addEventListener('click',e=>{ document.body.classList.toggle('nolabels'); e.currentTarget.classList.toggle('on'); sfx('click'); });
+document.addEventListener('keydown',e=>{ if(!started || e.target.closest('select,input,textarea,[contenteditable="true"]')) return; if(e.key==='ArrowRight') goStage(Math.min(7,stageIdx+1)); if(e.key==='ArrowLeft') goStage(stageIdx-1); if(e.key===' '){ e.preventDefault(); $('play').click(); } });
+
+function begin(){
+  if(started) return;
+  started=true; controls.autoRotate=false;
+  $('intro').classList.add('gone'); $('panel').classList.remove('hidden');
+}
+$('start').addEventListener('click',()=>{ initAudio(); begin(); goStage(0); });
+
+function updateSubUI(){
+  const s=STAGES[stageIdx];
+  const local = clamp(curT-stageIdx);
+  let u = local;
+  if(s.cycle){
+    const f=clamp(Math.floor(local*4),0,3); u = local>=1?1:(local*4-f);
+    $('floorinfo').innerHTML = local>=1 ? t('floorComplete') : t('floorProgress',{floor:f+1});
+  }
+  [...subsEl.children].forEach((b,k)=>{
+    const [,a,e]=s.subs[k]; const p=clamp((u-a)/(e-a));
+    b.style.setProperty('--p',p.toFixed(3));
+    b.classList.toggle('now', p>0&&p<1); b.classList.toggle('fin', p>=1 && !(s.cycle&&local<1&&false));
+  });
+  $('approved').classList.toggle('show', stageIdx===7 && curT>=7.8);
+}
+
+/* =========================================================
+   라벨 위치
+   ========================================================= */
+const vproj=new THREE.Vector3();
+const gEl=$('gauge');
+let gLast='';
+function updateGauge(){
+  if(!started || !gauge.show){ gEl.style.display='none'; return; }
+  vproj.copy(gauge.pos).project(camera);
+  if(vproj.z>1){ gEl.style.display='none'; return; }
+  const w=innerWidth,h=innerHeight;
+  const x=clamp((vproj.x+1)/2*w,140,w-140), y=clamp((1-vproj.y)/2*h,150,h-20);
+  gEl.style.display='flex';
+  gEl.style.transform=`translate(${x}px,${y}px) translate(-50%,-100%)`;
+  const key=gauge.mode+gauge.title+gauge.sub;
+  if(key!==gLast){ gEl.className='gauge '+gauge.mode; $('gT').textContent=gauge.title; $('gS').textContent=gauge.sub; gLast=key; }
+  $('gB').style.width=(gauge.p*100).toFixed(1)+'%';
+}
+function updateLabels(){
+  updateGauge();
+  const w=innerWidth,h=innerHeight;
+  LABELS.forEach((L,i)=>{
+    const el=labelEls[i];
+    const on = started && L.on(curT);
+    if(!on){ el.style.display='none'; el.classList.remove('open'); return; }
+    vproj.copy(L.pos()).project(camera);
+    if(vproj.z>1||vproj.x<-1.1||vproj.x>1.1||vproj.y<-1.1||vproj.y>1.1){ el.style.display='none'; return; }
+    el.style.display='flex';
+    el.style.transform=`translate(${(vproj.x+1)/2*w}px,${(1-vproj.y)/2*h}px) translate(-50%,-100%)`;
+  });
+}
+
+/* =========================================================
+   루프
+   ========================================================= */
+const clock=new THREE.Clock();
+let elapsed=0;
+function frame(){
+  const dt=Math.min(clock.getDelta(),.05); elapsed+=dt;
+  if(started && playing){
+    curT += dt/STAGES[stageIdx].dur;
+    if(curT>=stageIdx+1){ curT=stageIdx+1; playing=false; syncPlay(); }
+  }
+  if(fly){
+    fly.t+=dt/fly.dur; const k=ease(clamp(fly.t));
+    camera.position.lerpVectors(fly.fromP,fly.toP,k);
+    controls.target.lerpVectors(fly.fromT,fly.toT,k);
+    if(fly.t>=1) fly=null;
+  }
+  if(camFollow && !fly && stageIdx===3){
+    const want=clamp(topLevel(curT)-.5,3,13), dy=(want-controls.target.y)*Math.min(1,dt*1.2);
+    controls.target.y+=dy; camera.position.y+=dy;
+  }
+  update(curT,elapsed,dt);
+  updateSound(curT,elapsed,dt);
+  controls.update();
+  renderer.render(scene,camera);
+  updateLabels();
+  if(started) updateSubUI();
+  requestAnimationFrame(frame);
+}
+
+const allMats=new Set();
+scene.traverse(o=>{ if(o.material){ (Array.isArray(o.material)?o.material:[o.material]).forEach(m=>{ if(m.envMapIntensity!==undefined){ m.userData.env=m.envMapIntensity; allMats.add(m);} }); } });
+// 시작: 완성된 건물을 천천히 돌려 보여주기
+layout();
+{ const c=camPreset(INTRO_CAM); camera.position.copy(c.p); controls.target.copy(c.t); }
+controls.autoRotate=true; controls.autoRotateSpeed=.5;
+function refreshLanguage(){
+  const panelBody=$('panel').querySelector('.pbody');
+  const scrollTop=panelBody.scrollTop;
+  translateStages(); translateLabels(); translateTextures();
+  [...stepper.children].forEach((button,index)=>{
+    button.querySelector('span').textContent=STAGES[index].short;
+    button.title=STAGES[index].term;
+    button.setAttribute('aria-label',t('badge',{step:index+1})+' · '+STAGES[index].term);
+  });
+  renderStageUI(); updateSubUI(); syncPlay(); syncSoundBtn();
+  panelBody.scrollTop=scrollTop;
+  $('toast').classList.remove('show');
+  gLast=''; update(curT,elapsed,0); updateLabels();
+  layout();
+}
+window.addEventListener('constructionlanguagechange',refreshLanguage);
+refreshLanguage();
+
+requestAnimationFrame(()=>{ $('loading').classList.add('gone'); });
+frame();
+window.__dbg = { SND, THREE, scene, camera, mat, snapCam:()=>{ if(fly) fly.t=1; }, modesNow:()=>{ xrayK=(stageIdx===5&&xray)?1:0; cutK=(stageIdx===6&&cutaway)?1:0; nightK=(stageIdx===7&&night)?1:0; }, setT:(t)=>{curT=t;}, goStage, begin, get T(){return curT;}, set playing(v){playing=v;}, setNight:(v)=>{night=v;}, };
+</script>
+</body>
+</html>
+
